@@ -80,14 +80,13 @@
 <body class="bg-background text-slate-600 font-sans antialiased selection:bg-brand selection:text-white relative">
 
     <!-- 導覽列 -->
-    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 transition-all duration-300" id="navbar">
+  <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 transition-all duration-300" id="navbar">
         <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
             <a href="#" class="text-slate-900 text-xl font-bold tracking-wider flex items-center gap-2">
                 <i class="ph-fill ph-code text-brand text-2xl"></i>
                 AQUAFIRE
             </a>
             
-            <!-- 桌面版選單 -->
             <div class="hidden md:flex items-center gap-8 text-sm font-medium">
                 <a href="#projects" class="hover:text-brand transition-colors">專案作品</a>
                 <a href="#experience" class="hover:text-brand transition-colors">經歷</a>
@@ -97,10 +96,18 @@
                 </a>
             </div>
 
-            <!-- 手機版選單按鈕 -->
-            <button class="md:hidden text-2xl text-slate-600 hover:text-slate-900">
+            <button id="mobileMenuBtn" class="md:hidden text-2xl text-slate-600 hover:text-slate-900 transition-colors">
                 <i class="ph ph-list"></i>
             </button>
+        </div>
+
+        <div id="mobileMenu" class="md:hidden hidden absolute top-20 left-0 w-full bg-white border-b border-slate-200 shadow-xl transition-all duration-300 origin-top">
+            <div class="flex flex-col px-6 py-4 space-y-4 text-center text-slate-600 font-medium">
+                <a href="#projects" class="mobile-link hover:text-brand transition-colors py-2">專案作品</a>
+                <a href="#experience" class="mobile-link hover:text-brand transition-colors py-2">經歷</a>
+                <a href="#about" class="mobile-link hover:text-brand transition-colors py-2">關於我</a>
+                <a href="#contact" class="mobile-link text-brand font-bold py-2">聯絡我</a>
+            </div>
         </div>
     </nav>
 
@@ -551,6 +558,37 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
     <!-- JavaScript 互動與動畫邏輯 -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- 新增：手機版選單切換邏輯 ---
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            if (mobileMenuBtn && mobileMenu) {
+                // 點擊漢堡按鈕展開/收起選單
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    // 切換圖示 (清單 / 叉叉)
+                    const icon = mobileMenuBtn.querySelector('i');
+                    if (mobileMenu.classList.contains('hidden')) {
+                        icon.classList.remove('ph-x');
+                        icon.classList.add('ph-list');
+                    } else {
+                        icon.classList.remove('ph-list');
+                        icon.classList.add('ph-x');
+                    }
+                });
+
+                // 點擊任何一個連結後，自動收起手機選單
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                        const icon = mobileMenuBtn.querySelector('i');
+                        icon.classList.remove('ph-x');
+                        icon.classList.add('ph-list');
+                    });
+                });
+            }
+            // --- 新增結束 ---
             // 1. 導覽列滾動背景效果
             const navbar = document.getElementById('navbar');
             window.addEventListener('scroll', () => {
