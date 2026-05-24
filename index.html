@@ -149,26 +149,16 @@
         </div>
     </header>
 
-    <section id="projects" class="py-24 bg-white border-y border-slate-200 relative z-10">
+  <section id="projects" class="py-24 bg-white border-y border-slate-200 relative z-10">
         <div class="max-w-6xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 reveal">
-                <div>
-                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">精選作品</h2>
-                    <p class="text-slate-600">左右滑動瀏覽專案，點擊觀看完整設計內容</p>
-                </div>
-                <div class="hidden md:flex gap-4">
-                    <button id="slideLeftBtn" class="w-10 h-10 rounded-full bg-white border border-slate-200 shadow-sm hover:bg-slate-50 flex items-center justify-center text-slate-700 transition-colors">
-                        <i class="ph-bold ph-caret-left"></i>
-                    </button>
-                    <button id="slideRightBtn" class="w-10 h-10 rounded-full bg-white border border-slate-200 shadow-sm hover:bg-slate-50 flex items-center justify-center text-slate-700 transition-colors">
-                        <i class="ph-bold ph-caret-right"></i>
-                    </button>
-                </div>
+            <div class="mb-12 reveal">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">精選作品</h2>
+                <p class="text-slate-600">往下瀏覽專案，點擊觀看完整設計內容</p>
             </div>
 
-            <div id="projectsContainer" class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 -mx-6 px-6 hide-scrollbar scroll-smooth cursor-grab active:cursor-grabbing">
+            <div id="projectsContainer" class="columns-1 md:columns-2 lg:columns-3 gap-6">
                 
-                <div onclick="openProjectModal('boba')" class="min-w-[85vw] md:min-w-[400px] snap-center group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
+                <div onclick="openProjectModal('boba')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
                         <img src="./images/boba/passport.jpg?auto=format&fit=crop&q=80&w=800" alt="珍珠奶茶護照" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
@@ -178,14 +168,14 @@
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">插畫設計</span>
                         </div>
                         <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">珍珠奶茶護照設計</h3>
-                        <p class="text-slate-600 text-sm mb-4">原本護照套上的 (Republic of China) 字樣，很容易讓我們在國外旅遊時被誤認為中國人，會發生一些不必要的誤會，所以我設計的護照上就拿掉了這行文字，只留下 Taiwan字樣。在想封面的時候，腦中有想過一些元素是可以拿來代表台灣的東西，例如原住民的圖騰、台灣的宗教信仰…等，但如果用了這些元素，就會侷限了某種族或宗教而代表性不足。後來我想到珍珠奶茶這個台灣在地的平民美食，是外國朋友來都一定帶他們喝的飲料，都得到很好的回饋，民以食為天，吃的東西是最貼近生活文化，珍珠奶茶這個台灣代表性很高的飲料，拿來當作台灣護照封面，打破了種族、宗教、地區、甚至國界，又可以宣傳台灣。<br><br>The original 'Republic of China' text on the passport cover often leads to us being mistaken for Chinese citizens when traveling abroad, which can cause unnecessary misunderstandings. Therefore, in my passport design, I removed that line entirely and only kept the word 'Taiwan.'<br><br>When brainstorming the cover design, I considered various elements that could represent Taiwan, such as Indigenous totems or Taiwanese religious beliefs. However, I felt that using those elements might be too narrow, limiting the representation to a specific ethnic group or religion.<br><br>Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s the one drink we always make sure our foreign friends try when they visit, and it always receives great feedback. As the saying goes, 'food is the paramount necessity of the people'; what we eat and drink is the most authentic reflection of our daily culture. Using a highly representative drink like bubble tea for the Taiwan passport cover breaks down barriers of race, religion, region, and even national borders, all while serving as a fantastic way to promote Taiwan.</p>
+                        <p class="text-slate-600 text-sm mb-4">原本護照套上的 (Republic of China) 字樣，很容易讓我們在國外旅遊時被誤認為中國人，會發生一些不必要的誤會，所以我設計的護照上就拿掉了這行文字，只留下 Taiwan字樣。在想封面的時候，腦中有想過一些元素是可以拿來代表台灣的東西，例如原住民的圖騰、台灣的宗教信仰…等，但如果用了 these 元素，就會侷限了某種族或宗教而代表性不足。後來我想到珍珠奶茶這個台灣在地的平民美食，是外國朋友來都一定帶他們喝的飲料，都得到很好的回饋，民以食為天，吃的東西是最貼近生活文化，珍珠奶茶這個台灣代表性很高的飲料，拿來當作台灣護照封面，打破了種族、宗教、地區、甚至國界，又可以宣傳台灣。<br><br>The original 'Republic of China' text on the passport cover often leads to us being mistaken for Chinese citizens when traveling abroad, which can cause unnecessary misunderstandings. Therefore, in my passport design, I removed that line entirely and only kept the word 'Taiwan.'<br><br>When brainstorming the cover design, I considered various elements that could represent Taiwan, such as Indigenous totems or Taiwanese religious beliefs. However, I felt that using those elements might be too narrow, limiting the representation to a specific ethnic group or religion.<br><br>Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s the one drink we always make sure our foreign friends try when they visit, and it always receives great feedback. As the saying goes, 'food is the paramount necessity of the people'; what we eat and drink is the most authentic reflection of our daily culture. Using a highly representative drink like bubble tea for the Taiwan passport cover breaks down barriers of race, religion, region, and even national borders, all while serving as a fantastic way to promote Taiwan.</p>
                         <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
                             觀看內容 <i class="ph-bold ph-images"></i>
                         </span>
                     </div>
                 </div>
 
-                <div onclick="openProjectModal('fapa')" class="min-w-[85vw] md:min-w-[400px] snap-center group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-100 cursor-pointer shadow-sm">
+                <div onclick="openProjectModal('fapa')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-100 cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
                         <img src="./images/twflag/twf03.jpg?auto=format&fit=crop&q=80&w=800" alt="FAPA TAIWAN FLAG" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
@@ -202,7 +192,7 @@
                     </div>
                 </div>
 
-                <div onclick="openProjectModal('market')" class="min-w-[85vw] md:min-w-[400px] snap-center group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-200 cursor-pointer shadow-sm">
+                <div onclick="openProjectModal('market')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-200 cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
                         <img src="./images/market/01.jpg?auto=format&fit=crop&q=80&w=800" alt="市集活動海報" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
@@ -219,7 +209,7 @@
                     </div>
                 </div>
 
-                <div onclick="openProjectModal('exhibition')" class="min-w-[85vw] md:min-w-[400px] snap-center group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-200 cursor-pointer shadow-sm">
+                <div onclick="openProjectModal('exhibition')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-200 cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
                         <img src="./images/V1/01.jpg?auto=format&fit=crop&q=80&w=800" alt="成果展活動海報" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
@@ -236,7 +226,7 @@
                     </div>
                 </div>
 
-                <div onclick="openProjectModal('logo')" class="min-w-[85vw] md:min-w-[400px] snap-center group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
+                <div onclick="openProjectModal('logo')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
                         <img src="./images/logo/cover.jpg?auto=format&fit=crop&q=80&w=800" alt="Logo設計" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
@@ -246,14 +236,14 @@
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">品牌識別</span>
                         </div>
                         <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">Logo設計</h3>
-                        <p class="text-slate-600 text-sm mb-4">品牌識別（Brand Identity）簡單來說，就是品牌在社會大眾面前所展現的「長相」與「個性」。 如果把品牌比喻成一個人，他的名字、穿衣風格、說話語氣和行為舉止，就構成了他的個人特質；而品牌識別就是透過文字、色彩、標誌（Logo）和視覺系統，把企業的核心理念具體化，讓消費者一眼就能認出、並記住這個品牌。</p>
+                        <p class="text-slate-600 text-sm mb-4">品牌識別（Brand Identity）簡單來說，就是品牌在社會大眾面前所展現的「長向」與「個性」。如果把品牌比喻成一個人，他的名字、穿衣風格、說話語氣和行為舉止，就構成了他的個人特質；而品牌識別就是透過文字、色彩、標誌（Logo）和視覺系統，把企業的核心理念具體化，讓消費者一眼就能認出、並記住這個品牌。</p>
                         <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
                             觀看內容 <i class="ph-bold ph-images"></i>
                         </span>
                     </div>
                 </div>
 
-                <div onclick="openProjectModal('race')" class="min-w-[85vw] md:min-w-[400px] snap-center group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
+                <div onclick="openProjectModal('race')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
                         <img src="./images/race/cover.jpg?auto=format&fit=crop&q=80&w=800" alt="活動視覺KV" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
@@ -270,7 +260,7 @@
                     </div>
                 </div>
 
-       <div onclick="openProjectModal('brand')" class="min-w-[85vw] md:min-w-[400px] snap-center group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
+                <div onclick="openProjectModal('brand')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
                         <img src="./images/brand/cover.jpg?auto=format&fit=crop&q=80&w=800" alt="品牌形象" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
@@ -291,42 +281,32 @@
         </div>
     </section>
 
-    <div id="projectModal" class="fixed inset-0 z-[100] bg-white/95 backdrop-blur-xl hidden flex-col opacity-0 transition-opacity duration-300">
+  <div id="projectModal" class="fixed inset-0 z-[100] bg-white/95 backdrop-blur-xl hidden flex-col opacity-0 transition-opacity duration-300">
         
-        <div class="flex items-center justify-between p-6">
-            <h3 id="modalTitle" class="text-2xl font-bold text-slate-900">專案標題</h3>
-            <button onclick="closeProjectModal()" class="w-12 h-12 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-900 transition-colors shadow-sm">
+        <div class="flex items-center justify-between p-6 border-b border-slate-200 shrink-0 bg-white/50">
+            <div class="max-w-4xl">
+                <h3 id="modalTitle" class="text-2xl md:text-3xl font-bold text-slate-900 mb-2">專案標題</h3>
+                <p id="modalDesc" class="text-slate-600 text-sm md:text-base leading-relaxed">專案描述文字...</p>
+            </div>
+            <button onclick="closeProjectModal()" class="w-12 h-12 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-900 transition-colors shadow-sm shrink-0 ml-4">
                 <i class="ph ph-x text-2xl"></i>
             </button>
         </div>
 
-        <div class="flex-1 relative flex items-center justify-center p-4 md:p-12 overflow-hidden">
-            <button onclick="prevImage()" class="absolute left-4 md:left-12 z-10 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full bg-white/80 hover:bg-white border border-slate-200 text-slate-900 shadow-sm transition-all backdrop-blur-sm">
-                <i class="ph-bold ph-caret-left text-2xl md:text-3xl"></i>
-            </button>
-
-            <div class="relative w-full h-full flex items-center justify-center">
-                <img id="modalImage" src="" alt="作品內容" class="max-w-full max-h-full object-contain rounded-lg shadow-xl ring-1 ring-slate-900/5 transition-opacity duration-300">
-                
-                <div id="imageLoader" class="absolute inset-0 flex items-center justify-center hidden">
-                    <i class="ph ph-spinner-gap animate-spin text-4xl text-brand"></i>
+        <div class="flex-1 overflow-y-auto p-6 md:p-12 hide-scrollbar scroll-smooth">
+            <div id="modalImagesContainer" class="columns-1 md:columns-2 max-w-5xl mx-auto gap-6">
                 </div>
-            </div>
-
-            <button onclick="nextImage()" class="absolute right-4 md:right-12 z-10 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full bg-white/80 hover:bg-white border border-slate-200 text-slate-900 shadow-sm transition-all backdrop-blur-sm">
-                <i class="ph-bold ph-caret-right text-2xl md:text-3xl"></i>
-            </button>
         </div>
+    </div>
 
-        <div class="p-6 text-center">
-            <h4 id="imageCaption" class="text-lg font-bold text-slate-900 mb-1"></h4>
-            
-            <p id="modalDesc" class="text-slate-600 max-w-2xl mx-auto mb-3">專案描述文字...</p>
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 rounded-full text-slate-700 text-sm border border-slate-200">
-                <i class="ph ph-image"></i>
-                <span id="imageCounter">1 / 1</span>
-            </div>
-        </div>
+    <div id="imageZoomModal" class="fixed inset-0 z-[110] bg-slate-900/95 backdrop-blur-md hidden flex-col opacity-0 transition-opacity duration-300 items-center justify-center p-4 cursor-zoom-out" onclick="closeImageZoom()">
+        <button class="absolute top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer z-10">
+            <i class="ph ph-x text-2xl"></i>
+        </button>
+        
+        <img id="zoomedImage" src="" class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl transition-transform duration-300 scale-95" onclick="event.stopPropagation()">
+        
+        <p id="zoomedCaption" class="text-white mt-6 text-center text-sm md:text-base max-w-2xl font-medium"></p>
     </div>
 
     <section id="experience" class="py-24 relative z-10">
@@ -786,35 +766,58 @@
             }
 
         };
-        let currentProjectId = null;
-        let currentImageIndex = 0;
+  let currentProjectId = null;
 
-        // 打開燈箱
+        // 打開燈箱 (載入瀑布流)
         window.openProjectModal = function(projectId) {
             const project = portfolioData[projectId];
             if (!project) return;
 
             currentProjectId = projectId;
-            currentImageIndex = 0;
 
-            // 填入資料
+            // 1. 填入標題與總描述
             document.getElementById('modalTitle').innerText = project.title;
             document.getElementById('modalDesc').innerText = project.description;
-            updateModalImage();
 
-            // 顯示燈箱
+            // 2. 清空舊圖片，準備插入新圖片
+            const container = document.getElementById('modalImagesContainer');
+            container.innerHTML = ''; 
+
+            // 3. 迴圈動態生成瀑布流圖片卡片
+            project.images.forEach(imgData => {
+                // 確保 caption 存在，否則給空字串
+                const captionText = imgData.caption || '';
+                
+                const imgHTML = `
+                    <div class="break-inside-avoid w-full inline-block mb-6 group cursor-zoom-in" onclick="openImageZoom('${imgData.src}', '${captionText}')">
+                        <div class="relative rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1">
+                            <img src="${imgData.src}" alt="${captionText}" class="w-full h-auto object-cover">
+                            
+                            ${captionText ? `
+                                <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent p-6 pt-12 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <p class="text-white text-sm font-medium shadow-sm">${captionText}</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += imgHTML;
+            });
+
+            // 4. 顯示燈箱
             const modal = document.getElementById('projectModal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            // 延遲一點點以觸發淡入動畫
+            
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
                 modal.classList.add('opacity-100');
             }, 10);
-            // 鎖定背景滾動
-            document.body.style.overflow = 'hidden';
+            
+            document.body.style.overflow = 'hidden'; // 鎖定背景滾動
         };
-        // 關閉燈箱
+
+        // 關閉專案燈箱
         window.closeProjectModal = function() {
             const modal = document.getElementById('projectModal');
             modal.classList.remove('opacity-100');
@@ -823,56 +826,62 @@
             setTimeout(() => {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
-                document.getElementById('modalImage').src = ""; // 清空圖片
-                document.getElementById('imageCaption').innerText = ""; // 清空圖片說明
+                document.getElementById('modalImagesContainer').innerHTML = ''; // 清空記憶體
             }, 300);
-            // 恢復背景滾動
-            document.body.style.overflow = '';
-        };
-        // 更新圖片與計數器
-        function updateModalImage() {
-            const project = portfolioData[currentProjectId];
-            const imgElement = document.getElementById('modalImage');
-            const loader = document.getElementById('imageLoader');
-            const captionElement = document.getElementById('imageCaption');
-            // 圖片淡出與顯示 Loading
-            imgElement.style.opacity = '0.5';
-            loader.classList.remove('hidden');
-            imgElement.onload = function() {
-                imgElement.style.opacity = '1';
-                loader.classList.add('hidden');
-            };
-
-            // 設定新圖片路徑與單圖說明
-            const currentImageData = project.images[currentImageIndex];
-            imgElement.src = currentImageData.src;
-            captionElement.innerText = currentImageData.caption || '';
             
-            // 更新計數器 (例如: 1 / 3)
-            document.getElementById('imageCounter').innerText = `${currentImageIndex + 1} / ${project.images.length}`;
-        }
-
-        // 上一張
-        window.prevImage = function() {
-            const project = portfolioData[currentProjectId];
-            currentImageIndex = (currentImageIndex - 1 + project.images.length) % project.images.length;
-            updateModalImage();
-        };
-        // 下一張
-        window.nextImage = function() {
-            const project = portfolioData[currentProjectId];
-            currentImageIndex = (currentImageIndex + 1) % project.images.length;
-            updateModalImage();
+            document.body.style.overflow = ''; // 恢復背景滾動
         };
 
-        // 監聽鍵盤左右鍵與 ESC 鍵
+        // 打開單圖放大 (第三層)
+        window.openImageZoom = function(src, caption) {
+            const zoomModal = document.getElementById('imageZoomModal');
+            const zoomedImg = document.getElementById('zoomedImage');
+            
+            zoomedImg.src = src;
+            document.getElementById('zoomedCaption').innerText = caption;
+            
+            zoomModal.classList.remove('hidden');
+            zoomModal.classList.add('flex');
+            
+            setTimeout(() => {
+                zoomModal.classList.remove('opacity-0');
+                zoomModal.classList.add('opacity-100');
+                zoomedImg.classList.remove('scale-95');
+                zoomedImg.classList.add('scale-100');
+            }, 10);
+        };
+
+        // 關閉單圖放大
+        window.closeImageZoom = function() {
+            const zoomModal = document.getElementById('imageZoomModal');
+            const zoomedImg = document.getElementById('zoomedImage');
+            
+            zoomModal.classList.remove('opacity-100');
+            zoomModal.classList.add('opacity-0');
+            zoomedImg.classList.remove('scale-100');
+            zoomedImg.classList.add('scale-95');
+            
+            setTimeout(() => {
+                zoomModal.classList.add('hidden');
+                zoomModal.classList.remove('flex');
+                zoomedImg.src = "";
+            }, 300);
+        };
+
+        // 監聽鍵盤 ESC 鍵 (智慧關閉)
         document.addEventListener('keydown', (e) => {
-            const modal = document.getElementById('projectModal');
-            if (!modal.classList.contains('hidden')) {
-                if (e.key === 'ArrowRight') nextImage();
-                if (e.key === 'ArrowLeft') prevImage();
-        
-                if (e.key === 'Escape') closeProjectModal();
+            if (e.key === 'Escape') {
+                const zoomModal = document.getElementById('imageZoomModal');
+                const projectModal = document.getElementById('projectModal');
+                
+                // 如果放大圖片開著，先關閉放大圖片
+                if (!zoomModal.classList.contains('hidden')) {
+                    closeImageZoom();
+                } 
+                // 否則如果專案燈箱開著，就關閉專案燈箱
+                else if (!projectModal.classList.contains('hidden')) {
+                    closeProjectModal();
+                }
             }
         });
 </script>
