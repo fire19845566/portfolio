@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>游焰熾個人作品集 | 平面設計</title>
-    <!-- 引入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入 Phosphor Icons 圖示庫 -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <script>
@@ -79,8 +77,7 @@
 </head>
 <body class="bg-background text-slate-600 font-sans antialiased selection:bg-brand selection:text-white relative">
 
-    <!-- 導覽列 -->
-  <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 transition-all duration-300" id="navbar">
+    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 transition-all duration-300" id="navbar">
         <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
             <a href="#" class="text-slate-900 text-xl font-bold tracking-wider flex items-center gap-2">
                 <i class="ph-fill ph-code text-brand text-2xl"></i>
@@ -111,22 +108,16 @@
         </div>
     </nav>
 
-    <!-- Hero 首頁視覺區塊 -->
     <header class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-        <!-- 裝飾背景 -->
         <div class="absolute inset-0 bg-grid z-0"></div>
         <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-brand/10 blur-[120px] rounded-full z-0 pointer-events-none"></div>
 
         <div class="relative z-10 max-w-4xl mx-auto px-6 text-center reveal active flex flex-col items-center">
             
-            <!-- 個人照片區塊 -->
             <div class="relative mb-8 group">
-                <!-- 發光外框特效 -->
                 <div class="absolute -inset-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full blur opacity-40 group-hover:opacity-70 transition duration-1000 group-hover:duration-200"></div>
-                <!-- 照片容器 -->
                 <div class="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white bg-slate-100 flex items-center justify-center shadow-lg">
-                    <!-- 預設使用 Icon 代替，請將 src 替換為您的照片網址 -->
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aquafire" alt="游焰熾的個人照片" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <img src="./images/aquafire.jpg" alt="游焰熾的個人照片" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 </div>
             </div>
 
@@ -135,17 +126,17 @@
                 目前開放接受新專案與全職機會
             </div>
             
-            <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight mb-6">
-                打造生活感 <br class="md:hidden" />
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600">
-                    視覺平面體驗
+            <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6 leading-normal">
+                Feel Now / Find Next <br class="md:hidden" leading-normal />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600 leading-normal">           
+                    <br> 讓設計發生在感受與發現之間 </br>
                 </span>
             </h1>
             
             <p class="text-lg md:text-xl text-slate-600 mb-2 max-w-2xl mx-auto leading-relaxed">
-                你好，我是 Aquafire 游焰熾。我是一名把設計融入生活中的人</p>
+                你好，我是 Aquafire 游焰熾 再忙也要創作，把生活融入設計中。</p>
             <p class="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed"> 
-                再忙也要創作唷</p>
+                </p>
             
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a href="#projects" class="w-full sm:w-auto px-8 py-4 bg-slate-900 text-white font-bold rounded-full hover:bg-slate-800 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-slate-900/20">
@@ -158,7 +149,6 @@
         </div>
     </header>
 
-    <!-- 專案作品區塊 (已移至最上方) -->
     <section id="projects" class="py-24 bg-white border-y border-slate-200 relative z-10">
         <div class="max-w-6xl mx-auto px-6">
             <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 reveal">
@@ -176,10 +166,8 @@
                 </div>
             </div>
 
-            <!-- 橫向滑動容器 -->
             <div id="projectsContainer" class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 -mx-6 px-6 hide-scrollbar scroll-smooth cursor-grab active:cursor-grabbing">
                 
-                <!-- 專案 1 -->
                 <div onclick="openProjectModal('boba')" class="min-w-[85vw] md:min-w-[400px] snap-center group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
                         <img src="./images/boba/passport.jpg?auto=format&fit=crop&q=80&w=800" alt="珍珠奶茶護照" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
@@ -190,18 +178,13 @@
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">插畫設計</span>
                         </div>
                         <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">珍珠奶茶護照設計</h3>
-                        <p class="text-slate-600 text-sm mb-4">原本護照套上的 (Republic of China) 字樣，很容易讓我們在國外旅遊時被誤認為中國人，會發生一些不必要的誤會，所以我設計的護照上就拿掉了這行文字，只留下 Taiwan字樣。在想封面的時候，腦中有想過一些元素是可以拿來代表台灣的東西，例如原住民的圖騰、台灣的宗教信仰…等，但如果用了這些元素，就會侷限了某種族或宗教而代表性不足。後來我想到珍珠奶茶這個台灣在地的平民美食，是外國朋友來都一定帶他們喝的飲料，都得到很好的回饋，民以食為天，吃的東西是最貼近生活文化，珍珠奶茶這個台灣代表性很高的飲料，拿來當作台灣護照封面，打破了種族、宗教、地區、甚至國界，又可以宣傳台灣。</p>The original 'Republic of China' text on the passport cover often leads to us being mistaken for Chinese citizens when traveling abroad, which can cause unnecessary misunderstandings. Therefore, in my passport design, I removed that line entirely and only kept the word 'Taiwan.'
-
-When brainstorming the cover design, I considered various elements that could represent Taiwan, such as Indigenous totems or Taiwanese religious beliefs. However, I felt that using those elements might be too narrow, limiting the representation to a specific ethnic group or religion.
-
-Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s the one drink we always make sure our foreign friends try when they visit, and it always receives great feedback. As the saying goes, 'food is the paramount necessity of the people'; what we eat and drink is the most authentic reflection of our daily culture. Using a highly representative drink like bubble tea for the Taiwan passport cover breaks down barriers of race, religion, region, and even national borders, all while serving as a fantastic way to promote Taiwan.</p>
+                        <p class="text-slate-600 text-sm mb-4">原本護照套上的 (Republic of China) 字樣，很容易讓我們在國外旅遊時被誤認為中國人，會發生一些不必要的誤會，所以我設計的護照上就拿掉了這行文字，只留下 Taiwan字樣。在想封面的時候，腦中有想過一些元素是可以拿來代表台灣的東西，例如原住民的圖騰、台灣的宗教信仰…等，但如果用了這些元素，就會侷限了某種族或宗教而代表性不足。後來我想到珍珠奶茶這個台灣在地的平民美食，是外國朋友來都一定帶他們喝的飲料，都得到很好的回饋，民以食為天，吃的東西是最貼近生活文化，珍珠奶茶這個台灣代表性很高的飲料，拿來當作台灣護照封面，打破了種族、宗教、地區、甚至國界，又可以宣傳台灣。<br><br>The original 'Republic of China' text on the passport cover often leads to us being mistaken for Chinese citizens when traveling abroad, which can cause unnecessary misunderstandings. Therefore, in my passport design, I removed that line entirely and only kept the word 'Taiwan.'<br><br>When brainstorming the cover design, I considered various elements that could represent Taiwan, such as Indigenous totems or Taiwanese religious beliefs. However, I felt that using those elements might be too narrow, limiting the representation to a specific ethnic group or religion.<br><br>Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s the one drink we always make sure our foreign friends try when they visit, and it always receives great feedback. As the saying goes, 'food is the paramount necessity of the people'; what we eat and drink is the most authentic reflection of our daily culture. Using a highly representative drink like bubble tea for the Taiwan passport cover breaks down barriers of race, religion, region, and even national borders, all while serving as a fantastic way to promote Taiwan.</p>
                         <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
                             觀看內容 <i class="ph-bold ph-images"></i>
                         </span>
                     </div>
                 </div>
 
-                <!-- 專案 2 -->
                 <div onclick="openProjectModal('fapa')" class="min-w-[85vw] md:min-w-[400px] snap-center group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-100 cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
                         <img src="./images/twflag/twf03.jpg?auto=format&fit=crop&q=80&w=800" alt="FAPA TAIWAN FLAG" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
@@ -212,39 +195,104 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">旗幟設計</span>
                         </div>
                         <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">2023 FAPA TAIWAN FLAG DESIGN</h3>
-                        <p class="text-slate-600 text-sm mb-4">榮獲第三名。以現代簡約風格與台灣核心意象重新解構、設計的旗幟視覺。從15世紀大航海時代開始，葡萄牙人遠渡重洋在太平洋上看見美麗的台灣而喊出Formosa，讓台灣漸漸在國際上嶄露頭角，藍色代表的是太平洋，綠色代表著台灣島嶼上百岳山脈與自然環境，而白色是由七種色光所疊合而成，象徵著台灣島上豐富的多元文化在此地共榮共存共好著。</p>
-                                                                                                   Taiwan is a beautiful island country. Since the 15th century, during the Age of Discovery, Portuguese sailors sailed across the Pacific and caught sight of the beautiful Taiwan, calling it "Formosa," which put Taiwan on the map. The blue color in the flag represents the Pacific, while the green represents the island's central mountain range and natural environment. The white is formed by the overlapping of seven colored rays, symbolizing the diverse cultures thriving and coexisting on Taiwan's rich land.</p>
+                       <p class="text-slate-600 text-sm mb-4">榮獲第三名。以現代簡約風格與台灣核心意象重新解構、設計的旗幟視覺。從15世紀大航海時代開始，葡萄牙人遠渡重洋在太平洋上看見美麗的台灣而喊出Formosa，讓台灣漸漸在國際上嶄露頭角，藍色代表的是太平洋，綠色代表著台灣島嶼上百岳山脈與自然環境，而白色是由七種色光所疊合而成，象徵著台灣島上豐富的多元文化在此地共榮共存共好著。<br><br>Taiwan is a beautiful island country. Since the 15th century, during the Age of Discovery, Portuguese sailors sailed across the Pacific and caught sight of the beautiful Taiwan, calling it "Formosa," which put Taiwan on the map. The blue color in the flag represents the Pacific, while the green represents the island's central mountain range and natural environment. The white is formed by the overlapping of seven colored rays, symbolizing the diverse cultures thriving and coexisting on Taiwan's rich land.</p>
                         <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
                             觀看內容 <i class="ph-bold ph-images"></i>
                         </span>
                     </div>
                 </div>
 
-                <!-- 專案 3 -->
-                <div onclick="openProjectModal('vis')" class="min-w-[85vw] md:min-w-[400px] snap-center group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-200 cursor-pointer shadow-sm">
+                <div onclick="openProjectModal('market')" class="min-w-[85vw] md:min-w-[400px] snap-center group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-200 cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=800" alt="企業VIS形象" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
+                        <img src="./images/market/01.jpg?auto=format&fit=crop&q=80&w=800" alt="市集活動海報" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
                     <div class="p-6 relative z-10 bg-white">
                         <div class="flex gap-2 mb-4">
-                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">品牌重塑</span>
-                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">視覺指導</span>
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">品牌形象塑造</span>
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">視覺定位</span>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">企業VIS形象規劃</h3>
-                        <p class="text-slate-600 text-sm mb-4">為科技公司打造完整的品牌視覺識別系統，包含Logo、標準字與應用物設計。</p>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">市集海報設計規劃</h3>
+                        <p class="text-slate-600 text-sm mb-4">為市集打造完整的品牌視覺包含Logo、標準字與應用物設計。</p>
                         <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
                             觀看內容 <i class="ph-bold ph-images"></i>
                         </span>
                     </div>
                 </div>
+
+                <div onclick="openProjectModal('exhibition')" class="min-w-[85vw] md:min-w-[400px] snap-center group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-200 cursor-pointer shadow-sm">
+                    <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
+                        <img src="./images/V1/01.jpg?auto=format&fit=crop&q=80&w=800" alt="成果展活動海報" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
+                    </div>
+                    <div class="p-6 relative z-10 bg-white">
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">VIS概念</span>
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">系列活動海報</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">活動海報設計規劃</h3>
+                        <p class="text-slate-600 text-sm mb-4">為不同日期不同主題的社造成果展，打造同視覺海報，提升整體感。</p>
+                        <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
+                            觀看內容 <i class="ph-bold ph-images"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div onclick="openProjectModal('logo')" class="min-w-[85vw] md:min-w-[400px] snap-center group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
+                    <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
+                        <img src="./images/logo/cover.jpg?auto=format&fit=crop&q=80&w=800" alt="Logo設計" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
+                    </div>
+                    <div class="p-6 relative z-10 bg-white">
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">量身打造</span>
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">品牌識別</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">Logo設計</h3>
+                        <p class="text-slate-600 text-sm mb-4">品牌識別（Brand Identity）簡單來說，就是品牌在社會大眾面前所展現的「長相」與「個性」。 如果把品牌比喻成一個人，他的名字、穿衣風格、說話語氣和行為舉止，就構成了他的個人特質；而品牌識別就是透過文字、色彩、標誌（Logo）和視覺系統，把企業的核心理念具體化，讓消費者一眼就能認出、並記住這個品牌。</p>
+                        <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
+                            觀看內容 <i class="ph-bold ph-images"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div onclick="openProjectModal('race')" class="min-w-[85vw] md:min-w-[400px] snap-center group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
+                    <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
+                        <img src="./images/race/cover.jpg?auto=format&fit=crop&q=80&w=800" alt="活動視覺KV" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
+                    </div>
+                    <div class="p-6 relative z-10 bg-white">
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">活動視覺</span>
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">活動品牌識別</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">活動視覺設計</h3>
+                        <p class="text-slate-600 text-sm mb-4">活動視覺設計（Key Visual, KV）是一場活動的靈魂，透過色彩、字體、圖像與排版，將核心精神轉化為受眾有感的視覺識別。它不僅是一張單一海報，更是一套能全面應用於實體與數位平台的視覺系統</p>
+                        <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
+                            觀看內容 <i class="ph-bold ph-images"></i>
+                        </span>
+                    </div>
+                </div>
+
+       <div onclick="openProjectModal('brand')" class="min-w-[85vw] md:min-w-[400px] snap-center group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
+                    <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
+                        <img src="./images/brand/cover.jpg?auto=format&fit=crop&q=80&w=800" alt="品牌形象" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
+                    </div>
+                    <div class="p-6 relative z-10 bg-white">
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">品牌形象</span>
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">品牌識別</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">企業視覺設計</h3>
+                        <p class="text-slate-600 text-sm mb-4">品牌形象設計是透過視覺、語言與商業策略的整合，賦予企業或產品獨特的人格與價值觀。它不僅僅是一個 Logo，更是與消費者溝通的橋樑，協助企業在市場中脫穎而出，建立長期的品牌信任感與辨識度。</p>
+                        <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
+                            觀看內容 <i class="ph-bold ph-images"></i>
+                        </span>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <!-- 第二層：專案內容燈箱 (Lightbox) - 明亮版 -->
     <div id="projectModal" class="fixed inset-0 z-[100] bg-white/95 backdrop-blur-xl hidden flex-col opacity-0 transition-opacity duration-300">
         
-        <!-- 燈箱頂部導覽 -->
         <div class="flex items-center justify-between p-6">
             <h3 id="modalTitle" class="text-2xl font-bold text-slate-900">專案標題</h3>
             <button onclick="closeProjectModal()" class="w-12 h-12 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-900 transition-colors shadow-sm">
@@ -252,32 +300,25 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
             </button>
         </div>
 
-        <!-- 圖片展示區 -->
         <div class="flex-1 relative flex items-center justify-center p-4 md:p-12 overflow-hidden">
-            <!-- 上一張按鈕 -->
             <button onclick="prevImage()" class="absolute left-4 md:left-12 z-10 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full bg-white/80 hover:bg-white border border-slate-200 text-slate-900 shadow-sm transition-all backdrop-blur-sm">
                 <i class="ph-bold ph-caret-left text-2xl md:text-3xl"></i>
             </button>
 
-            <!-- 圖片容器 -->
             <div class="relative w-full h-full flex items-center justify-center">
                 <img id="modalImage" src="" alt="作品內容" class="max-w-full max-h-full object-contain rounded-lg shadow-xl ring-1 ring-slate-900/5 transition-opacity duration-300">
                 
-                <!-- 載入中動畫 -->
                 <div id="imageLoader" class="absolute inset-0 flex items-center justify-center hidden">
                     <i class="ph ph-spinner-gap animate-spin text-4xl text-brand"></i>
                 </div>
             </div>
 
-            <!-- 下一張按鈕 -->
             <button onclick="nextImage()" class="absolute right-4 md:right-12 z-10 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full bg-white/80 hover:bg-white border border-slate-200 text-slate-900 shadow-sm transition-all backdrop-blur-sm">
                 <i class="ph-bold ph-caret-right text-2xl md:text-3xl"></i>
             </button>
         </div>
 
-        <!-- 底部圖片計數器與描述 -->
         <div class="p-6 text-center">
-            <!-- 新增單圖獨立說明 -->
             <h4 id="imageCaption" class="text-lg font-bold text-slate-900 mb-1"></h4>
             
             <p id="modalDesc" class="text-slate-600 max-w-2xl mx-auto mb-3">專案描述文字...</p>
@@ -288,7 +329,6 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
         </div>
     </div>
 
-    <!-- 經歷時間軸區塊 -->
     <section id="experience" class="py-24 relative z-10">
         <div class="max-w-4xl mx-auto px-6">
             <div class="text-center mb-16 reveal">
@@ -296,10 +336,8 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                 <p class="text-slate-600">我過去幾年的職業生涯與成長軌跡</p>
             </div>
 
-            <!-- 時間軸設計 -->
             <div class="relative border-l-2 border-slate-200 ml-4 md:ml-6 space-y-12">
                 
-                <!-- 經歷 1 -->
                 <div class="relative pl-8 md:pl-12 reveal">
                     <span class="absolute flex items-center justify-center w-5 h-5 bg-brand rounded-full -left-[11px] top-1 ring-4 ring-background shadow-[0_0_15px_rgba(14,165,233,0.4)]"></span>
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
@@ -314,7 +352,6 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                     </ul>
                 </div>
 
-                <!-- 經歷 2 -->
                 <div class="relative pl-8 md:pl-12 reveal delay-100">
                     <span class="absolute flex items-center justify-center w-5 h-5 bg-slate-300 rounded-full -left-[11px] top-1 ring-4 ring-background"></span>
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
@@ -328,7 +365,6 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                     </ul>
                 </div>
 
-                <!-- 經歷 3 -->
                 <div class="relative pl-8 md:pl-12 reveal delay-100">
                     <span class="absolute flex items-center justify-center w-5 h-5 bg-slate-300 rounded-full -left-[11px] top-1 ring-4 ring-background"></span>
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
@@ -344,7 +380,6 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                     </ul>
                 </div>
 
-                <!-- 經歷 4 -->
                 <div class="relative pl-8 md:pl-12 reveal delay-100">
                     <span class="absolute flex items-center justify-center w-5 h-5 bg-slate-300 rounded-full -left-[11px] top-1 ring-4 ring-background"></span>
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
@@ -359,8 +394,7 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                         <li>3D工業繪圖</li>
                     </ul>
                 </div>
-                 <!-- 經歷 5 -->
-                <div class="relative pl-8 md:pl-12 reveal delay-100">
+                 <div class="relative pl-8 md:pl-12 reveal delay-100">
                     <span class="absolute flex items-center justify-center w-5 h-5 bg-slate-300 rounded-full -left-[11px] top-1 ring-4 ring-background"></span>
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
                         <h3 class="text-xl font-bold text-slate-900">平面設計師</h3>
@@ -375,8 +409,7 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                         <li>電子報設計、發送</li>
                     </ul>
                 </div>
-                  <!-- 經歷 6 -->
-                <div class="relative pl-8 md:pl-12 reveal delay-100">
+                  <div class="relative pl-8 md:pl-12 reveal delay-100">
                     <span class="absolute flex items-center justify-center w-5 h-5 bg-slate-300 rounded-full -left-[11px] top-1 ring-4 ring-background"></span>
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-2 gap-2">
                         <h3 class="text-xl font-bold text-slate-900">平面設計師</h3>
@@ -395,7 +428,6 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
         </div>
     </section>
 
-    <!-- 關於我區塊 -->
     <section id="about" class="py-24 bg-white border-y border-slate-200 relative z-10">
         <div class="max-w-6xl mx-auto px-6">
             <div class="grid md:grid-cols-2 gap-16 items-center">
@@ -438,7 +470,6 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                     </div>
                 </div>
                 
-                <!-- 技能條條列 -->
                 <div class="reveal delay-200">
                     <h3 class="text-xl font-bold text-slate-900 mb-6">核心技能</h3>
                     <div class="space-y-6">
@@ -480,6 +511,15 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                         </div>
                         <div>
                             <div class="flex justify-between mb-2">
+                                <span class="text-slate-700 font-medium">影像剪輯</span>
+                                <span class="text-brand font-medium">75%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-2">
+                                <div class="bg-brand h-2 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
                                 <span class="text-slate-700 font-medium">3D列印、雷切</span>
                                 <span class="text-brand font-medium">80%</span>
                             </div>
@@ -487,7 +527,7 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                                 <div class="bg-brand h-2 rounded-full" style="width: 80%"></div>
                             </div>
                         </div>
-                         <div>
+                          <div>
                             <div class="flex justify-between mb-2">
                                 <span class="text-slate-700 font-medium">AI工具 Gemini、ChatGPT、NBLM、SUNO</span>
                                 <span class="text-brand font-medium">85%</span>
@@ -520,7 +560,6 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
         </div>
     </section>
 
-    <!-- 聯絡我區塊 -->
     <section id="contact" class="py-24 relative z-10">
         <div class="max-w-3xl mx-auto px-6 text-center reveal">
             <h2 class="text-3xl md:text-5xl font-bold text-slate-900 mb-6">準備好開始新專案了嗎？</h2>
@@ -529,18 +568,15 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
             </p>
             
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <!-- 電子郵件按鈕 -->
                 <a href="mailto:fire198470@gmail.com" class="inline-flex items-center gap-2 px-8 py-4 bg-brand text-white font-bold rounded-full hover:bg-blue-500 transition-all shadow-lg shadow-brand/30 hover:shadow-brand/50 hover:-translate-y-1 w-full sm:w-auto justify-center">
                     <i class="ph-fill ph-envelope-simple text-xl"></i> fire198470@gmail.com
                 </a>
                 
-                <!-- Facebook 粉絲專頁按鈕 -->
                 <a href="https://www.facebook.com/fnfndesign" target="_blank" class="inline-flex items-center gap-2 px-8 py-4 bg-[#1877F2] text-white font-bold rounded-full hover:bg-[#166fe5] transition-all shadow-lg shadow-[#1877F2]/30 hover:shadow-[#1877F2]/50 hover:-translate-y-1 w-full sm:w-auto justify-center">
                     <i class="ph-fill ph-facebook-logo text-xl"></i> Facebook 粉絲專頁
                 </a>
             </div>
             
-            <!-- Line ID 顯示區塊 -->
             <div class="mt-8 inline-flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-full text-slate-700 font-medium shadow-sm hover:shadow-md transition-shadow">
                 <i class="ph-fill ph-chat-circle-text text-[#00c300] text-2xl"></i> 
                 Line ID：<span class="select-all font-bold text-slate-900 cursor-text">fire1984</span>
@@ -548,14 +584,12 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
         </div>
     </section>
 
-    <!-- 頁尾 -->
     <footer class="py-8 border-t border-slate-200 bg-white text-center relative z-10">
         <p class="text-slate-500 text-sm">
             &copy; 2026 Aquafire 游焰熾. All rights reserved. <br class="sm:hidden" />Designed & Built with gemini.
         </p>
     </footer>
 
-    <!-- JavaScript 互動與動畫邏輯 -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- 新增：手機版選單切換邏輯 ---
@@ -577,7 +611,6 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                         icon.classList.add('ph-x');
                     }
                 });
-
                 // 點擊任何一個連結後，自動收起手機選單
                 mobileLinks.forEach(link => {
                     link.addEventListener('click', () => {
@@ -600,13 +633,11 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                     navbar.classList.replace('bg-white/95', 'bg-white/80');
                 }
             });
-
             // 2. Intersection Observer: 元素進入畫面時的淡入動畫 (Reveal 特效)
             const revealOptions = {
                 threshold: 0.15, // 元素出現 15% 時觸發
                 rootMargin: "0px 0px -50px 0px"
             };
-
             const revealObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -616,7 +647,6 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                     }
                 });
             }, revealOptions);
-
             const revealElements = document.querySelectorAll('.reveal');
             revealElements.forEach(el => revealObserver.observe(el));
 
@@ -640,7 +670,7 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
         // ==========================================
         
         // 在這裡設定您的專案內容！每個專案都有一個代號 (例如 'boba', 'fapa')
-        const portfolioData = {
+   const portfolioData = {
             'boba': {
                 title: '珍珠奶茶護照設計',
                 description: '神人設計師構思「台灣珍奶護照」 網友直呼：超想要！',
@@ -657,10 +687,11 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                 images: [
                     { src:'./images/twflag/twf01.jpg?auto=format&fit=crop&q=80&w=1600', caption: '面向世界美麗的太平洋給我的靈感' },
                     { src:'./images/twflag/twf02.jpg?auto=format&fit=crop&q=80&w=1600', caption: '設計理念 / 台灣是一個美麗的島國' }, 
-                    { src:'./images/twflag/twf04.jpg?auto=format&fit=crop&q=80&w=1600', caption: '國旗別針 AI生成' },                            
+                    { src:'./images/twflag/twf04.jpg?auto=format&fit=crop&q=80&w=1600', caption: '國旗別針 AI生成' },           
                 ]
             },
-            'vis': {
+            // 👉 修正 1：將代號改為 market，並在結尾加上逗號
+            'market': {
                 title: '蝸牛遊市集活動海報',
                 description: '每期不同系列設計。',
                 images: [
@@ -675,11 +706,86 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                     { src:'./images/market/09.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },
                     { src:'./images/market/10.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },
                     { src:'./images/market/11.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },
-                    { src:'./images/market/12.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },                   
+                    { src:'./images/market/12.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },                    
                 ]
+            }, // 👉 就是這裡！漏掉的這個逗號會讓程式當機
+            // 👉 修正 2：將代號改為 exhibition
+            'exhibition': {
+                title: '社造成果展系列活動海報',
+                description: '不同主題，不同日期相同視覺',
+                images: [
+                    { src:'./images/V1/01.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' },
+                    { src:'./images/V1/02.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' },
+                    { src:'./images/V1/03.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' },
+                    { src:'./images/V1/04.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' },
+                    { src:'./images/V1/05.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' },
+                    { src:'./images/V1/06.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' },
+                    { src:'./images/V1/07.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' },
+                    { src:'./images/V1/08.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' },         
+                ]
+            },
+            'logo': {
+                title: 'Logo設計',
+                description: '為不同業主打造適合Logo',
+                images: [
+                    { src:'./images/logo/logo01.jpg?auto=format&fit=crop&q=80&w=1600', caption: '黎悠香草 Logo設計' },
+                    { src:'./images/logo/logo02.jpg?auto=format&fit=crop&q=80&w=1600', caption: '黎悠香草 識別應用' },
+                    { src:'./images/logo/logo03.jpg?auto=format&fit=crop&q=80&w=1600', caption: '鳳林蝸牛賽跑 Logo設計' },
+                    { src:'./images/logo/logo04.jpg?auto=format&fit=crop&q=80&w=1600', caption: '鳳林蝸牛賽跑大會旗' },
+                    { src:'./images/logo/logo05.jpg?auto=format&fit=crop&q=80&w=1600', caption: '鳳凰大樂隊 Logo設計' },
+                    { src:'./images/logo/logo06.jpg?auto=format&fit=crop&q=80&w=1600', caption: '鳳凰大樂隊 鑰匙圈' },
+                    { src:'./images/logo/logo07.jpg?auto=format&fit=crop&q=80&w=1600', caption: '鳳凰大樂隊 T-shirt' },
+                    { src:'./images/logo/logo08.jpg?auto=format&fit=crop&q=80&w=1600', caption: '好客專門Logo設計' },
+                    { src:'./images/logo/logo09.jpg?auto=format&fit=crop&q=80&w=1600', caption: '好客專門印刷物' },
+                    { src:'./images/logo/logo10.jpg?auto=format&fit=crop&q=80&w=1600', caption: 'FNFN Logo設計' },
+                    { src:'./images/logo/logo11.jpg?auto=format&fit=crop&q=80&w=1600', caption: 'FNFN 識別應用' },
+                    { src:'./images/logo/logo12.jpg?auto=format&fit=crop&q=80&w=1600', caption: '拾豆屋 Logo設計' },
+                    { src:'./images/logo/logo13.jpg?auto=format&fit=crop&q=80&w=1600', caption: '拾豆屋 產品應用' },
+                    { src:'./images/logo/logo14.jpg?auto=format&fit=crop&q=80&w=1600', caption: '鳳林生活田 Logo設計' },
+                    { src:'./images/logo/logo15.jpg?auto=format&fit=crop&q=80&w=1600', caption: '鳳林生活田 印刷物' }, 
+                    { src:'./images/logo/logo16.jpg?auto=format&fit=crop&q=80&w=1600', caption: '泥藝工坊Logo設計' }, 
+                    { src:'./images/logo/logo17.jpg?auto=format&fit=crop&q=80&w=1600', caption: '泥藝工坊 產品視覺應用' }, 
+                    { src:'./images/logo/logo18.jpg?auto=format&fit=crop&q=80&w=1600', caption: '實驗室 Logo設計' }, 
+                    { src:'./images/logo/logo19.jpg?auto=format&fit=crop&q=80&w=1600', caption: '實驗室 Logo視覺應用' }, 
+                    { src:'./images/logo/logo20.jpg?auto=format&fit=crop&q=80&w=1600', caption: '馬里勿 Logo設計' }, 
+                    { src:'./images/logo/logo21.jpg?auto=format&fit=crop&q=80&w=1600', caption: '馬里勿 產品包裝應用' },         
+                ]
+            },
+            'race': {
+                title: '活動視覺設計KV',
+                description: '以品牌方式經營活動主視覺',
+                images: [
+                    { src:'./images/race/01.jpg?auto=format&fit=crop&q=80&w=1600', caption: '大會活動主視覺海報' },
+                    { src:'./images/race/02.jpg?auto=format&fit=crop&q=80&w=1600', caption: '官方活動粉絲頁' },
+                    { src:'./images/race/03.jpg?auto=format&fit=crop&q=80&w=1600', caption: '工作人員識別證' },
+                    { src:'./images/race/04.jpg?auto=format&fit=crop&q=80&w=1600', caption: '紀念品小燈箱' },
+                    { src:'./images/race/05.jpg?auto=format&fit=crop&q=80&w=1600', caption: '舞台背板設計' },
+                    { src:'./images/race/06.jpg?auto=format&fit=crop&q=80&w=1600', caption: '活動紀念品' },
+                    { src:'./images/race/07.jpg?auto=format&fit=crop&q=80&w=1600', caption: '獎牌設計' },
+                    { src:'./images/race/08.jpg?auto=format&fit=crop&q=80&w=1600', caption: '破記錄獎狀' },
+                    { src:'./images/race/09.jpg?auto=format&fit=crop&q=80&w=1600', caption: '參賽證書' },
+                    { src:'./images/race/10.jpg?auto=format&fit=crop&q=80&w=1600', caption: '活動流程' },
+                    { src:'./images/race/11.jpg?auto=format&fit=crop&q=80&w=1600', caption: '活動報名處' },    
+                ]
+            },
+            'brand': {
+                title: '品牌形象',
+                description: '建立讓人熟悉的企業視覺形象',
+                images: [
+                    { src:'./images/brand/01.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
+                    { src:'./images/brand/02.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
+                    { src:'./images/brand/03.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
+                    { src:'./images/brand/04.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
+                    { src:'./images/brand/05.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
+                    { src:'./images/brand/06.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
+                    { src:'./images/brand/07.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
+                    { src:'./images/brand/08.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
+                    { src:'./images/brand/09.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
+                    { src:'./images/brand/10.jpg?auto=format&fit=crop&q=80&w=1600', caption: '店家暖簾應用' },
+                      ]
             }
-        };
 
+        };
         let currentProjectId = null;
         let currentImageIndex = 0;
 
@@ -705,11 +811,9 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                 modal.classList.remove('opacity-0');
                 modal.classList.add('opacity-100');
             }, 10);
-
             // 鎖定背景滾動
             document.body.style.overflow = 'hidden';
         };
-
         // 關閉燈箱
         window.closeProjectModal = function() {
             const modal = document.getElementById('projectModal');
@@ -722,22 +826,18 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
                 document.getElementById('modalImage').src = ""; // 清空圖片
                 document.getElementById('imageCaption').innerText = ""; // 清空圖片說明
             }, 300);
-
             // 恢復背景滾動
             document.body.style.overflow = '';
         };
-
         // 更新圖片與計數器
         function updateModalImage() {
             const project = portfolioData[currentProjectId];
             const imgElement = document.getElementById('modalImage');
             const loader = document.getElementById('imageLoader');
             const captionElement = document.getElementById('imageCaption');
-            
             // 圖片淡出與顯示 Loading
             imgElement.style.opacity = '0.5';
             loader.classList.remove('hidden');
-
             imgElement.onload = function() {
                 imgElement.style.opacity = '1';
                 loader.classList.add('hidden');
@@ -758,7 +858,6 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
             currentImageIndex = (currentImageIndex - 1 + project.images.length) % project.images.length;
             updateModalImage();
         };
-
         // 下一張
         window.nextImage = function() {
             const project = portfolioData[currentProjectId];
@@ -772,9 +871,10 @@ Then, I thought of bubble tea, a beloved, everyday treat here in Taiwan. It’s 
             if (!modal.classList.contains('hidden')) {
                 if (e.key === 'ArrowRight') nextImage();
                 if (e.key === 'ArrowLeft') prevImage();
+        
                 if (e.key === 'Escape') closeProjectModal();
             }
         });
-    </script>
+</script>
 </body>
 </html>
