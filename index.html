@@ -303,6 +303,7 @@
             </div>
 
             <div class="w-full lg:w-[62%] lg:h-full lg:overflow-y-auto p-6 md:p-10 hide-scrollbar bg-white">
+                <div id="modalVideoContainer" class="max-w-4xl mx-auto mb-8 hidden"></div>
                 <div id="modalImagesContainer" class="columns-1 md:columns-2 gap-6 max-w-4xl mx-auto pb-10">
                 </div>
             </div>
@@ -724,6 +725,7 @@
                 title: '活動視覺設計KV',
                 cover: './images/race/cover.jpg?auto=format&fit=crop&q=80&w=1600',
                 description: '活動視覺設計（Key Visual, KV）是一場活動的靈魂，透過色彩、字體、圖像與排版，將核心精神轉化為受眾有感的視覺識別。它不僅是一張單一海報，更是一套能全面應用於實體與數位平台的視覺系統。',
+                youtube: 'WzWVIr0_yK4',                
                 images: [
                     { src:'./images/race/01.jpg?auto=format&fit=crop&q=80&w=1600', caption: '大會活動主視覺海報' },
                     { src:'./images/race/02.jpg?auto=format&fit=crop&q=80&w=1600', caption: '官方活動粉絲頁' },
@@ -780,6 +782,21 @@
             }
 
             // 3. 清空右側舊圖片容器
+            const videoContainer = document.getElementById('modalVideoContainer');
+            if (project.youtube) {
+                // 如果該專案有設定 youtube 影片代號，就動態產生 iframe 播放器
+                videoContainer.innerHTML = `
+                    <div class="w-full aspect-video rounded-2xl overflow-hidden bg-slate-900 shadow-md border border-slate-200">
+                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/${project.youtube}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                `;
+                videoContainer.classList.remove('hidden');
+            } else {
+                // 如果沒有影片，就把容器清空並隱藏
+                videoContainer.innerHTML = '';
+                videoContainer.classList.add('hidden');
+            }
+
             const container = document.getElementById('modalImagesContainer');
             container.innerHTML = ''; 
 
@@ -830,8 +847,12 @@
                 modal.classList.remove('flex');
                 document.getElementById('modalImagesContainer').innerHTML = ''; // 釋放記憶體
                 document.getElementById('modalCoverImage').src = ''; // 清空封面
+                
+                // 👇 新增這兩行：關閉時清空影片，停止播放 👇
+                document.getElementById('modalVideoContainer').innerHTML = ''; 
+                document.getElementById('modalVideoContainer').classList.add('hidden');
+                
             }, 300);
-            
             document.body.style.overflow = ''; // 恢復網頁底層滾動
         };
 
