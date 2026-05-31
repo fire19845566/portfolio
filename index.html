@@ -25,6 +25,41 @@
     </script>
 
     <style>
+/* 👇 新增：寶寶睡覺模式 (深色模式) 的全域設定 👇 */
+        html {
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+        
+        /* 當啟動暗黑模式時，覆蓋原本的明亮色彩 */
+        html.dark body {
+            background-color: #0f172a !important; /* 深邃的夜空藍 */
+            color: #cbd5e1 !important;
+        }
+        html.dark .bg-white, 
+        html.dark .bg-slate-50, 
+        html.dark .bg-slate-100 {
+            background-color: #1e293b !important; /* 卡片與燈箱變成深灰色 */
+            border-color: #334155 !important;
+        }
+        html.dark .text-slate-900 {
+            color: #f8fafc !important; /* 標題變成明亮的白色 */
+        }
+        html.dark .text-slate-600,
+        html.dark .text-slate-700 {
+            color: #94a3b8 !important; /* 內文變成柔和的淺灰色 */
+        }
+        html.dark .border-slate-200 {
+            border-color: #334155 !important;
+        }
+        html.dark nav {
+            background-color: rgba(15, 23, 42, 0.85) !important; /* 導覽列半透明深夜色 */
+        }
+        html.dark #projectModal,
+        html.dark #projectModal .bg-white,
+        html.dark #projectModal .bg-slate-50 {
+            background-color: #0f172a !important; /* 燈箱背景融合夜色 */
+        }
+        /* 👆 新增結束 👆 */
         /* 自定義捲軸 - 明亮版 */
         ::-webkit-scrollbar {
             width: 8px;
@@ -73,9 +108,22 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+/* 隱藏電腦版的預設游標 */
+        @media (min-width: 768px) {
+            body, a, button, .cursor-pointer, .cursor-zoom-in, .cursor-zoom-out, .cursor-text {
+                cursor: none !important;
+            }
+        }
+        
+        /* 游標平滑移動的動畫屬性 */
+        #cursor-ring {
+            transition: transform 0.15s ease-out, background-color 0.2s ease, width 0.2s ease, height 0.2s ease;
+        }
     </style>
 </head>
 <body class="bg-background text-slate-600 font-sans antialiased selection:bg-brand selection:text-white relative">
+    <div id="cursor-dot" class="fixed top-0 left-0 w-2 h-2 bg-brand rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 hidden md:block mix-blend-difference"></div>
+    <div id="cursor-ring" class="fixed top-0 left-0 w-8 h-8 border-2 border-brand/50 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 hidden md:block"></div>
 
     <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 transition-all duration-300" id="navbar">
         <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -91,6 +139,10 @@
                 <a href="#contact" class="px-5 py-2.5 bg-white hover:bg-slate-50 text-slate-900 rounded-full border border-slate-200 hover:border-brand transition-all shadow-sm">
                     聯絡我
                 </a>
+                    <button id="themeToggleBtn" class="ml-4 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none" title="開燈 (寶寶醒著)">
+                    <img id="themeToggleImg" src="./images/light-switch.png" alt="切換作息" class="w-full h-full object-contain transition-transform duration-300 hover:scale-110">
+                </button>
+                </div>
             </div>
 
             <button id="mobileMenuBtn" class="md:hidden text-2xl text-slate-600 hover:text-slate-900 transition-colors">
@@ -581,6 +633,100 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+// 👇 新增：圖片開關 (深色模式) 切換邏輯 👇
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const themeToggleImg = document.getElementById('themeToggleImg');
+            const htmlElement = document.documentElement;
+
+            // 🌟 在這裡設定您的圖片路徑 🌟
+            const imgLight = './images/light-switch.png'; // 開燈狀態的圖片 (寶寶醒著)
+            const imgDark = './images/dark-switch.png';   // 關燈狀態的圖片 (寶寶睡覺)
+
+            // 關燈狀態 (寶寶睡覺)
+            const setDarkMode = () => {
+                htmlElement.classList.add('dark');
+                themeToggleImg.src = imgDark; // 換成關燈圖片
+                themeToggleBtn.title = "關燈 (寶寶睡覺中)";
+            };
+
+            // 開燈狀態 (寶寶醒著)
+            const setLightMode = () => {
+                htmlElement.classList.remove('dark');
+                themeToggleImg.src = imgLight; // 換成開燈圖片
+                themeToggleBtn.title = "開燈 (寶寶醒著)";
+            };
+
+            // 檢查之前的設定
+            if (localStorage.theme === 'dark') {
+                setDarkMode();
+            } else {
+                setLightMode(); // 確保初始載入時圖片正確
+            }
+
+            // 監聽圖片按鈕點擊事件
+            if (themeToggleBtn) {
+                themeToggleBtn.addEventListener('click', () => {
+                    // 加上一點點擊縮放的 Q 彈動畫效果
+                    themeToggleImg.style.transform = 'scale(0.8)';
+                    setTimeout(() => themeToggleImg.style.transform = 'scale(1)', 150);
+
+                    if (htmlElement.classList.contains('dark')) {
+                        setLightMode();
+                        localStorage.theme = 'light';
+                    } else {
+                        setDarkMode();
+                        localStorage.theme = 'dark';
+                    }
+                });
+            }
+            // 👆 新增結束 👆
+// 👇 新增：自訂滑鼠游標邏輯 👇
+            const cursorDot = document.getElementById('cursor-dot');
+            const cursorRing = document.getElementById('cursor-ring');
+            
+            // 只有在電腦版才執行游標邏輯 (避免干擾手機操作)
+            if (window.innerWidth >= 768) {
+                // 1. 讓游標跟著滑鼠移動
+                window.addEventListener('mousemove', (e) => {
+                    requestAnimationFrame(() => {
+                        cursorDot.style.left = `${e.clientX}px`;
+                        cursorDot.style.top = `${e.clientY}px`;
+                        cursorRing.style.left = `${e.clientX}px`;
+                        cursorRing.style.top = `${e.clientY}px`;
+                    });
+                });
+
+                // 2. 偵測畫面上所有可點擊的元素
+                const addCursorHoverEffect = () => {
+                    const clickables = document.querySelectorAll('a, button, .cursor-pointer, .cursor-zoom-in, .cursor-zoom-out');
+                    clickables.forEach(el => {
+                        // 確保不會重複綁定
+                        if (!el.dataset.cursorBound) {
+                            el.dataset.cursorBound = "true";
+                            el.addEventListener('mouseenter', () => {
+                                // 移入時：光環放大並填滿微透明品牌色
+                                cursorRing.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                                cursorRing.style.backgroundColor = 'rgba(14, 165, 233, 0.15)';
+                                cursorRing.style.borderColor = 'rgba(14, 165, 233, 0)';
+                            });
+                            el.addEventListener('mouseleave', () => {
+                                // 移出時：恢復原狀
+                                cursorRing.style.transform = 'translate(-50%, -50%) scale(1)';
+                                cursorRing.style.backgroundColor = 'transparent';
+                                cursorRing.style.borderColor = 'rgba(14, 165, 233, 0.5)';
+                            });
+                        }
+                    });
+                };
+
+                // 初始化綁定
+                addCursorHoverEffect();
+                
+                // 每當打開燈箱動態產生新圖片時，重新綁定新元素的游標特效
+                const observer = new MutationObserver(addCursorHoverEffect);
+                observer.observe(document.body, { childList: true, subtree: true });
+            }
+            // 👆 新增結束 👆
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const mobileMenu = document.getElementById('mobileMenu');
             const mobileLinks = document.querySelectorAll('.mobile-link');
