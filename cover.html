@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>封面版型產生器</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        /* 預覽區域：固定 16:9 比例 (可以根據你的 PNG 尺寸修改) */
+        .preview-container {
+            position: relative;
+            width: 640px;
+            height: 360px;
+            background-color: #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        /* 底層：使用者上傳的照片 */
+        #userImagePreview {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
+            transform-origin: center center;
+            display: none;
+            max-width: none;
+        }
+        /* 頂層：你的固定文字排版 PNG */
+        .template-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            pointer-events: none; /* 讓滑鼠事件穿透，方便未來擴充 */
+            z-index: 10;
+        }
+        /* 控制面板樣式 */
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .control-group label {
+            width: 80px;
+            font-weight: bold;
+        }
+        input[type="range"] {
+            flex: 1;
+        }
+        button {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #1d4ed8;
+        }
+        /* 隱藏實際用來合成的畫布 */
+        #mainCanvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>封面版型產生器 (方案 B)</h2>
+    
+    <div class="preview-container">
+        <img id="userImagePreview" src="" alt="使用者照片">
+        <img class="template-overlay" id="templateImg" src="https://placehold.co/640x360/png?text=YOUR+TEXT+TEMPLATE+PNG" alt="文字模板">
+    </div>
+
+    <div class="control-panel">
+        <div class="control-group">
+            <label>1. 選取照片</label>
+            <input type="file" id="uploadInput" accept="image/*">
+        </div>
+        
+        <div class="control-group">
+            <label>2. 縮放大小</label>
+            <input type="range" id="scaleSlider" min="0.1" max="3" step="0.01" value="1" disabled>
+        </div>
+
+        <div class="control-group">
+            <label>3. 左右位移</label>
+            <input type="range" id="posXSlider" min="-500" max="500" step="1" value="0" disabled>
+        </div>
+
+        <div class="control-group">
+            <label>4. 上下位移</label>
+            <input type="range" id="posYSlider" min="-500" max="500" step="1" value="0" disabled>
+        </div>
+
+        <button id="downloadBtn" disabled>5. 產生並下載封面</button>
+    </div>
+</div>
+
+<canvas id="mainCanvas" width="1280" height="720"></canvas>
+
+<script>
+    // 取得 DOM 元素
+    const uploadInput = document.getElementById('uploadInput');
+    const userImagePreview = document.getElementById('userImagePreview');
+    const templateImg = document.getElementById('templateImg');
+    const scaleSlider = document.getElementById('scaleSlider');
+    const posXSlider = document.getElementById('posXSlider');
+    const posYSlider = document.getElementById('posYSlider');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const mainCanvas = document.getElementById('mainCanvas');
+    const ctx = mainCanvas.getContext('2d');
+
+    let originalImg = new Image(); // 儲存原始圖片物件供 Canvas 使用
+    let imgLoaded = false;
+
+    // 1. 處理圖片上傳
+    uploadInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            // 更新網頁上的即時預覽
+            userImagePreview.src = event.target.result;
+            userImagePreview.style.display = 'block';
+            
+            // 讀取給 Canvas 合成用的圖片
+            originalImg.src = event.target.result;
+            originalImg.onload = function() {
+                imgLoaded = true;
+                // 啟用控制項
+                scaleSlider.disabled = false;
+                posXSlider.disabled = false;
+                posYSlider.disabled = false;
+                downloadBtn.disabled = false;
+                
+                // 重設滑桿初始值
+                scaleSlider.value = 1;
+                posXSlider.value = 0;
+                posYSlider.value = 0;
+                updatePreview();
+            }
+        }
+        reader.readAsDataURL(file);
+    });
+
+    // 2. 監聽滑桿變更，即時更新網頁預覽效果 (利用 CSS Transform)
+    function updatePreview() {
+        const scale = scaleSlider.value;
+        const x = posXSlider.value;
+        const y = posYSlider.value;
+        
+        // 注意：因為本來就有 translate(-50%, -50%) 來置中，所以要把位移補在後面
+        userImagePreview.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) scale(${scale})`;
+    }
+
+    scaleSlider.addEventListener('input', updatePreview);
+    posXSlider.addEventListener('input', updatePreview);
+    posYSlider.addEventListener('input', updatePreview);
+
+    // 3. 核心：合成圖片並下載
+    downloadBtn.addEventListener('click', function() {
+        if (!imgLoaded) return;
+
+        // 清空畫布
+        ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+
+        // 取得目前使用者的調整參數
+        const scale = parseFloat(scaleSlider.value);
+        // 因為預覽視窗(640x360)與實際導出畫布(1280x720)有 2 倍的尺寸放大率，位移點需要乘上比例
+        const canvasScaleRatio = mainCanvas.width / 640; 
+        const xOffset = parseFloat(posXSlider.value) * canvasScaleRatio;
+        const yOffset = parseFloat(posYSlider.value) * canvasScaleRatio;
+
+        // 計算圖片在 Canvas 置中的基礎座標
+        const canvasImgWidth = originalImg.width * scale * (360 / originalImg.height) * canvasScaleRatio; 
+        const canvasImgHeight = 360 * scale * canvasScaleRatio; 
+        
+        // 如果想保持原圖比例置中，這邊做簡單計算
+        // 為了讓邏輯等同於網頁上的居中，我們使用 Canvas 的狀態機制（Save/Restore）
+        ctx.save();
+        // 將畫布中心移到使用者調整的位置
+        ctx.translate(mainCanvas.width / 2 + xOffset, mainCanvas.height / 2 + yOffset);
+        // 繪製使用者照片 (置中繪製)
+        const drawW = originalImg.width * scale * 0.7; // 基礎縮放率，可依需求微調
+        const drawH = originalImg.height * scale * 0.7;
+        ctx.drawImage(originalImg, -drawW / 2, -drawH / 2, drawW, drawH);
+        ctx.restore();
+
+        // 4. 疊加上層的文字模板 PNG
+        ctx.drawImage(templateImg, 0, 0, mainCanvas.width, mainCanvas.height);
+
+        // 5. 觸發瀏覽器下載
+        const link = document.createElement('a');
+        link.download = 'my-custom-cover.png';
+        link.href = mainCanvas.toDataURL('image/png');
+        link.click();
+    });
+</script>
+
+</body>
+</html>
