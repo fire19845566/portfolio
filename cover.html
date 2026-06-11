@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>直式封面版型產生器</title>
+    <title>FNFN封面產生器</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2563eb">
@@ -30,7 +30,6 @@
             gap: 20px;
             box-sizing: border-box;
         }
-        /* 預覽區域：等比例縮小 0.35 倍 (1153*0.35 = 403.55, 1488*0.35 = 520.8) */
         .preview-container {
             position: relative;
             width: 100%;
@@ -42,7 +41,7 @@
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
             margin: 0 auto;
         }
-        /* 底層：確保照片有基礎寬度可以顯示 */
+        /* 靜態照片預覽 */
         #userImagePreview {
             position: absolute;
             top: 50%;
@@ -53,7 +52,17 @@
             transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
             transform-origin: center center;
         }
-        /* 頂層：固定文字排版 PNG */
+        /* 即時相機預覽畫面 */
+        #liveVideo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 讓畫面填滿視窗 */
+            transform: translate(-50%, -50%);
+            display: none;
+        }
         .template-overlay {
             position: absolute;
             top: 0;
@@ -64,7 +73,6 @@
             pointer-events: none;
             z-index: 10;
         }
-        /* 控制面板樣式 */
         .control-panel {
             display: flex;
             flex-direction: column;
@@ -103,7 +111,6 @@
             background-color: #9ca3af;
             cursor: not-allowed;
         }
-        /* 美化的上傳與拍照按鈕 */
         .btn-upload {
             flex: 1;
             background-color: #f3f4f6;
@@ -121,6 +128,18 @@
         .btn-upload:hover {
             background-color: #e5e7eb;
         }
+        /* 專屬拍照按鈕，會發光 */
+        #shutterBtn {
+            display: none;
+            background-color: #ef4444;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
         #mainCanvas {
             display: none;
         }
@@ -129,16 +148,16 @@
 <body>
 
 <div class="container">
-    <h2 style="text-align: center; margin: 0;">封面版型產生器</h2>
-    <p style="text-align: center; color: #6b7280; margin: 0; font-size: 14px;">輸出尺寸：1153 x 1488 px</p>
+    <h2 style="text-align: center; margin: 0;">FNFN封面產生器</h2>
     
     <div class="preview-container" id="previewBox">
         <img id="userImagePreview" src="" alt="使用者照片">
+        <video id="liveVideo" autoplay playsinline></video>
+        
         <img class="template-overlay" id="templateImg" src="cover_1153x1488.png" alt="文字模板" onerror="this.src='https://placehold.co/1153x1488/png?text=Preview'">
     </div>
 
     <div class="control-panel">
-        
         <div class="control-group">
             <label class="title">1. 照片來源</label>
             <div style="display: flex; gap: 10px; flex: 1;">
@@ -146,10 +165,9 @@
                     📁 相簿選圖
                     <input type="file" id="uploadInput" accept="image/*" style="display: none;">
                 </label>
-                <label class="btn-upload" style="border-color: #10b981; color: #047857;">
-                    📸 立即拍照
-                    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;">
-                </label>
+                <button id="startCameraBtn" class="btn-upload" style="border-color: #10b981; color: #047857; margin-top: 0;">
+                    📸 即時相機
+                </button>
             </div>
         </div>
 
@@ -157,7 +175,7 @@
             <label class="title">1.5. 選擇版型</label>
             <select id="templateSelect" style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #d1d5db; font-size: 14px;">
                 <option value="cover_1153x1488.png">版型A</option>
-                <option value="cover2_1153x1488.png">版型B</option>
+                <option value="cover_style_B.png">版型B</option>
             </select>
         </div>
         
@@ -176,6 +194,7 @@
             <input type="range" id="posYSlider" min="-800" max="800" step="1" value="0" disabled>
         </div>
 
+        <button id="shutterBtn">⏺ 拍下這張！</button>
         <button id="downloadBtn" disabled>5. 產生並下載完美封面</button>
     </div>
 </div>
@@ -184,9 +203,11 @@
 
 <script>
     const uploadInput = document.getElementById('uploadInput');
-    const cameraInput = document.getElementById('cameraInput');
+    const startCameraBtn = document.getElementById('startCameraBtn');
+    const shutterBtn = document.getElementById('shutterBtn');
     const templateSelect = document.getElementById('templateSelect');
     const userImagePreview = document.getElementById('userImagePreview');
+    const liveVideo = document.getElementById('liveVideo');
     const templateImg = document.getElementById('templateImg');
     const scaleSlider = document.getElementById('scaleSlider');
     const posXSlider = document.getElementById('posXSlider');
@@ -198,41 +219,100 @@
 
     let originalImg = new Image();
     let imgLoaded = false;
+    let videoStream = null;
 
-    // 監聽版型選單變化，即時更換上層 PNG
+    // 版型切換
     templateSelect.addEventListener('change', function() {
         templateImg.src = this.value;
     });
 
-    // 獨立處理圖片讀取的邏輯 (相簿與相機共用)
-    function handleImageUpload(e) {
+    // 處理相簿選圖
+    uploadInput.addEventListener('change', function(e) {
+        stopCamera(); // 若相機開著，先關閉
         const file = e.target.files[0];
         if (!file) return;
 
         const reader = new FileReader();
         reader.onload = function(event) {
-            userImagePreview.src = event.target.result;
-            userImagePreview.style.display = 'block';
-            
-            originalImg.src = event.target.result;
-            originalImg.onload = function() {
-                imgLoaded = true;
-                scaleSlider.disabled = false;
-                posXSlider.disabled = false;
-                posYSlider.disabled = false;
-                downloadBtn.disabled = false;
-                
-                scaleSlider.value = 1;
-                posXSlider.value = 0;
-                posYSlider.value = 0;
-                updatePreview();
-            }
+            loadToCanvas(event.target.result);
         }
         reader.readAsDataURL(file);
+    });
+
+    // 將圖片載入預覽與滑桿控制
+    function loadToCanvas(dataUrl) {
+        userImagePreview.src = dataUrl;
+        userImagePreview.style.display = 'block';
+        
+        originalImg.src = dataUrl;
+        originalImg.onload = function() {
+            imgLoaded = true;
+            scaleSlider.disabled = false;
+            posXSlider.disabled = false;
+            posYSlider.disabled = false;
+            downloadBtn.disabled = false;
+            
+            scaleSlider.value = 1;
+            posXSlider.value = 0;
+            posYSlider.value = 0;
+            updatePreview();
+        }
     }
 
-    uploadInput.addEventListener('change', handleImageUpload);
-    cameraInput.addEventListener('change', handleImageUpload);
+    // 🎥 啟動即時相機
+    startCameraBtn.addEventListener('click', async function() {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            alert("您的瀏覽器不支援即時相機功能，請改用相簿上傳。");
+            return;
+        }
+        try {
+            // 請求手機後置鏡頭
+            videoStream = await navigator.mediaDevices.getUserMedia({ 
+                video: { facingMode: 'environment' } 
+            });
+            liveVideo.srcObject = videoStream;
+            liveVideo.style.display = 'block';
+            userImagePreview.style.display = 'none'; // 隱藏靜態圖
+            
+            // UI 切換：顯示拍照按鈕，隱藏下載按鈕與禁用滑桿
+            shutterBtn.style.display = 'block';
+            downloadBtn.style.display = 'none';
+            scaleSlider.disabled = true;
+            posXSlider.disabled = true;
+            posYSlider.disabled = true;
+        } catch (err) {
+            alert("無法開啟相機，請確認您已允許網頁使用相機權限！");
+        }
+    });
+
+    // ⏺ 拍下照片
+    shutterBtn.addEventListener('click', function() {
+        if (!videoStream) return;
+
+        // 建立一個暫存畫布來擷取當前影片的一幀
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = liveVideo.videoWidth;
+        tempCanvas.height = liveVideo.videoHeight;
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCtx.drawImage(liveVideo, 0, 0, tempCanvas.width, tempCanvas.height);
+
+        // 將那一格畫面轉成圖片 URL
+        const dataUrl = tempCanvas.toDataURL('image/png');
+        
+        stopCamera(); // 拍照完關閉相機
+        loadToCanvas(dataUrl); // 丟回原本的處理流程，允許使用者微調與下載
+    });
+
+    // 停止相機的共用函數
+    function stopCamera() {
+        if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+            videoStream = null;
+        }
+        liveVideo.style.display = 'none';
+        shutterBtn.style.display = 'none';
+        downloadBtn.style.display = 'block';
+    }
 
     function updatePreview() {
         const scale = scaleSlider.value;
@@ -245,17 +325,14 @@
     posXSlider.addEventListener('input', updatePreview);
     posYSlider.addEventListener('input', updatePreview);
 
-    // 畫布合成與下載
+    // 下載合成
     downloadBtn.addEventListener('click', function() {
         if (!imgLoaded) return;
-
         ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
 
         const scale = parseFloat(scaleSlider.value);
-        // 動態取得目前網頁預覽框的實際寬度，計算正確的放大倍率
         const currentPreviewWidth = previewBox.offsetWidth;
         const canvasScaleRatio = mainCanvas.width / currentPreviewWidth; 
-        
         const xOffset = parseFloat(posXSlider.value) * canvasScaleRatio;
         const yOffset = parseFloat(posYSlider.value) * canvasScaleRatio;
 
@@ -264,7 +341,6 @@
         
         const previewDisplayWidth = currentPreviewWidth;
         const previewDisplayHeight = previewDisplayWidth * (originalImg.height / originalImg.width);
-        
         const drawW = previewDisplayWidth * scale * canvasScaleRatio;
         const drawH = previewDisplayHeight * scale * canvasScaleRatio;
         
@@ -274,14 +350,12 @@
         ctx.drawImage(templateImg, 0, 0, mainCanvas.width, mainCanvas.height);
 
         const link = document.createElement('a');
-        // 依照選取的版型命名下載檔案
         const selectedTemplateName = templateSelect.options[templateSelect.selectedIndex].text;
         link.download = `我的封面_${selectedTemplateName}.png`;
         link.href = mainCanvas.toDataURL('image/png');
         link.click();
     });
 
-    // 註冊 PWA Service Worker (讓手機視為 App 的必要條件)
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('data:text/javascript,console.log("PWA SW registered");').catch(()=>{});
