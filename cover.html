@@ -325,7 +325,7 @@
     posXSlider.addEventListener('input', updatePreview);
     posYSlider.addEventListener('input', updatePreview);
 
-    // 下載合成
+// === 進階版：支援手機原生分享與相簿儲存 ===
     downloadBtn.addEventListener('click', function() {
         if (!imgLoaded) return;
         ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
@@ -349,18 +349,35 @@
 
         ctx.drawImage(templateImg, 0, 0, mainCanvas.width, mainCanvas.height);
 
-        const link = document.createElement('a');
         const selectedTemplateName = templateSelect.options[templateSelect.selectedIndex].text;
-        link.download = `我的封面_${selectedTemplateName}.png`;
-        link.href = mainCanvas.toDataURL('image/png');
-        link.click();
-    });
+        const fileName = `我的封面_${selectedTemplateName}.png`;
 
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('data:text/javascript,console.log("PWA SW registered");').catch(()=>{});
-        });
-    }
+        // 轉換 Canvas 為 Blob 檔案物件 (為了讓手機原生系統能看懂這張圖片)
+        mainCanvas.toBlob(async function(blob) {
+            const file = new File([blob], fileName, { type: 'image/png' });
+
+            // 檢查設備是否支援原生分享功能
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    // 呼叫手機的原生分享面板 (會出現「儲存影像」或分享到其他 App 的選項)
+                    await navigator.share({
+                        files: [file],
+                        title: '專屬封面',
+                        text: '這是我剛做好的封面！'
+                    });
+                } catch (err) {
+                    console.log('分享取消或發生錯誤:', err);
+                }
+            } else {
+                // 如果是電腦版，或是設備太舊不支援分享，退回原本的直接下載模式
+                const link = document.createElement('a');
+                link.download = fileName;
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                URL.revokeObjectURL(link.href);
+            }
+        }, 'image/png');
+    });
 </script>
 
 </body>
