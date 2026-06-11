@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FNFN封面產生器</title>
+    <title>直式封面版型產生器</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -12,8 +16,10 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            margin: 0;
         }
         .container {
+            width: 100%;
             max-width: 500px;
             background: white;
             padding: 20px;
@@ -22,30 +28,32 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
+            box-sizing: border-box;
         }
         /* 預覽區域：等比例縮小 0.35 倍 (1153*0.35 = 403.55, 1488*0.35 = 520.8) */
         .preview-container {
             position: relative;
-            width: 403px;
-            height: 521px;
+            width: 100%;
+            max-width: 403px;
+            aspect-ratio: 1153 / 1488;
             background-color: #e5e7eb;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
             margin: 0 auto;
         }
-        /* 【關鍵修正】底層：確保照片有基礎寬度可以顯示 */
+        /* 底層：確保照片有基礎寬度可以顯示 */
         #userImagePreview {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 100%; /* 讓照片預設跟預覽視窗一樣寬 */
+            width: 100%;
             height: auto;
             display: none;
             transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
             transform-origin: center center;
         }
-        /* 頂層：你的固定文字排版 PNG */
+        /* 頂層：固定文字排版 PNG */
         .template-overlay {
             position: absolute;
             top: 0;
@@ -60,173 +68,18 @@
         .control-panel {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 15px;
         }
         .control-group {
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        .control-group label {
+        .control-group label.title {
             width: 80px;
             font-weight: bold;
             font-size: 14px;
+            flex-shrink: 0;
         }
         input[type="range"] {
             flex: 1;
-        }
-        button {
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #1d4ed8;
-        }
-        #mainCanvas {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h2 style="text-align: center; margin: 0;">FNFN封面產生器</h2>
-    <p style="text-align: center; color: #6b7280; margin: 0; font-size: 14px;">輸出尺寸：1153 x 1488 px</p>
-    
-    <div class="preview-container">
-        <img id="userImagePreview" src="" alt="使用者照片">
-        <img class="template-overlay" id="templateImg" src="cover_1153x1488.png" alt="文字模板" onerror="this.src='https://placehold.co/1153x1488/png?text=Please+Upload+cover_1153x1488.png'">
-    </div>
-
-    <div class="control-panel">
-        <div class="control-group">
-            <label>1. 選取照片</label>
-            <input type="file" id="uploadInput" accept="image/*">
-        </div>
-        <div class="control-group">
-            <label>1.5. 選擇版型</label>
-            <select id="templateSelect" style="flex: 1; padding: 5px; border-radius: 4px;">
-                <option value="cover_1153x1488.png">封面1</option>
-                <option value="cover2_1153x1488.png">封面2</option>
-            </select>
-        </div>
-        <div class="control-group">
-            <label>2. 縮放大小</label>
-            <input type="range" id="scaleSlider" min="0.1" max="5" step="0.01" value="1" disabled>
-        </div>
-
-        <div class="control-group">
-            <label>3. 左右位移</label>
-            <input type="range" id="posXSlider" min="-400" max="400" step="1" value="0" disabled>
-        </div>
-
-        <div class="control-group">
-            <label>4. 上下位移</label>
-            <input type="range" id="posYSlider" min="-400" max="400" step="1" value="0" disabled>
-        </div>
-
-        <button id="downloadBtn" disabled>5. 產生並下載完美封面</button>
-    </div>
-</div>
-
-<canvas id="mainCanvas" width="1153" height="1488"></canvas>
-
-<script>
-    const uploadInput = document.getElementById('uploadInput');
-    const templateSelect = document.getElementById('templateSelect');
-    const userImagePreview = document.getElementById('userImagePreview');
-    const templateImg = document.getElementById('templateImg');
-    const scaleSlider = document.getElementById('scaleSlider');
-    const posXSlider = document.getElementById('posXSlider');
-    const posYSlider = document.getElementById('posYSlider');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const mainCanvas = document.getElementById('mainCanvas');
-    const ctx = mainCanvas.getContext('2d');
-
-    let originalImg = new Image();
-    let imgLoaded = false;
-
-    uploadInput.addEventListener('change', function(e) {
-        templateSelect.addEventListener('change', function() {
-        templateImg.src = this.value;
-    });
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            userImagePreview.src = event.target.result;
-            userImagePreview.style.display = 'block';
-            
-            originalImg.src = event.target.result;
-            originalImg.onload = function() {
-                imgLoaded = true;
-                scaleSlider.disabled = false;
-                posXSlider.disabled = false;
-                posYSlider.disabled = false;
-                downloadBtn.disabled = false;
-                
-                scaleSlider.value = 1;
-                posXSlider.value = 0;
-                posYSlider.value = 0;
-                updatePreview();
-            }
-        }
-        reader.readAsDataURL(file);
-    });
-
-    function updatePreview() {
-        const scale = scaleSlider.value;
-        const x = posXSlider.value;
-        const y = posYSlider.value;
-        userImagePreview.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) scale(${scale})`;
-    }
-
-    scaleSlider.addEventListener('input', updatePreview);
-    posXSlider.addEventListener('input', updatePreview);
-    posYSlider.addEventListener('input', updatePreview);
-
-    // 【優化畫布合成公式】
-    downloadBtn.addEventListener('click', function() {
-        if (!imgLoaded) return;
-
-        ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
-
-        const scale = parseFloat(scaleSlider.value);
-        const canvasScaleRatio = mainCanvas.width / 403; // 2.86 倍
-        const xOffset = parseFloat(posXSlider.value) * canvasScaleRatio;
-        const yOffset = parseFloat(posYSlider.value) * canvasScaleRatio;
-
-        ctx.save();
-        // 移動到真實畫布中心點
-        ctx.translate(mainCanvas.width / 2 + xOffset, mainCanvas.height / 2 + yOffset);
-        
-        // 根據預覽時 width: 100% (即 403px) 的比例，計算在 1153px 真實畫布下的對應寬高
-        const previewDisplayWidth = 403;
-        const previewDisplayHeight = previewDisplayWidth * (originalImg.height / originalImg.width);
-        
-        const drawW = previewDisplayWidth * scale * canvasScaleRatio;
-        const drawH = previewDisplayHeight * scale * canvasScaleRatio;
-        
-        ctx.drawImage(originalImg, -drawW / 2, -drawH / 2, drawW, drawH);
-        ctx.restore();
-
-        // 疊加文字版面
-        ctx.drawImage(templateImg, 0, 0, mainCanvas.width, mainCanvas.height);
-
-        const link = document.createElement('a');
-        link.download = 'cover_1153x1488.png';
-        link.href = mainCanvas.toDataURL('image/png');
-        link.click();
-    });
-</script>
-
-</body>
-</html>
