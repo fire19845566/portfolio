@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FNFN封面產生器</title>
+    <title>直式封面版型產生器</title>
     
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#2563eb">
@@ -41,7 +41,6 @@
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
             margin: 0 auto;
         }
-        /* 靜態照片預覽 */
         #userImagePreview {
             position: absolute;
             top: 50%;
@@ -52,14 +51,13 @@
             transform: translate(-50%, -50%) translate(0px, 0px) scale(1);
             transform-origin: center center;
         }
-        /* 即時相機預覽畫面 */
         #liveVideo {
             position: absolute;
             top: 50%;
             left: 50%;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 讓畫面填滿視窗 */
+            object-fit: cover;
             transform: translate(-50%, -50%);
             display: none;
         }
@@ -128,7 +126,15 @@
         .btn-upload:hover {
             background-color: #e5e7eb;
         }
-        /* 專屬拍照按鈕，會發光 */
+        /* 🔄 切換鏡頭按鈕樣式 */
+        #switchCameraBtn {
+            display: none;
+            background-color: #4b5563;
+        }
+        #switchCameraBtn:hover {
+            background-color: #374151;
+        }
+        /* ⏺ 拍照按鈕樣式 */
         #shutterBtn {
             display: none;
             background-color: #ef4444;
@@ -148,12 +154,11 @@
 <body>
 
 <div class="container">
-    <h2 style="text-align: center; margin: 0;">FNFN封面產生器</h2>
+    <h2 style="text-align: center; margin: 0;">封面版型產生器</h2>
     
     <div class="preview-container" id="previewBox">
         <img id="userImagePreview" src="" alt="使用者照片">
         <video id="liveVideo" autoplay playsinline></video>
-        
         <img class="template-overlay" id="templateImg" src="cover_1153x1488.png" alt="文字模板" onerror="this.src='https://placehold.co/1153x1488/png?text=Preview'">
     </div>
 
@@ -172,29 +177,33 @@
         </div>
 
         <div class="control-group">
-            <label class="title">1.5. 選擇版型</label>
+            <label class="title">2. 選擇版型</label>
             <select id="templateSelect" style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #d1d5db; font-size: 14px;">
                 <option value="cover_1153x1488.png">版型A</option>
-                <option value="cover2_1153x1488.png">版型B</option>
+                <option value="cover_style_B.png">版型B</option>
+                <option value="cover_style_C.png">提供</option>
+                <option value="cover_style_D.png">純提供</option>
             </select>
         </div>
         
         <div class="control-group">
-            <label class="title">2. 縮放大小</label>
+            <label class="title">3. 縮放大小</label>
             <input type="range" id="scaleSlider" min="0.1" max="5" step="0.01" value="1" disabled>
         </div>
 
         <div class="control-group">
-            <label class="title">3. 左右位移</label>
+            <label class="title">4. 左右位移</label>
             <input type="range" id="posXSlider" min="-800" max="800" step="1" value="0" disabled>
         </div>
 
         <div class="control-group">
-            <label class="title">4. 上下位移</label>
+            <label class="title">5. 上下位移</label>
             <input type="range" id="posYSlider" min="-800" max="800" step="1" value="0" disabled>
         </div>
 
+        <button id="switchCameraBtn">🔄 切換前後鏡頭</button>
         <button id="shutterBtn">⏺ 拍下這張！</button>
+        
         <button id="downloadBtn" disabled>5. 產生並下載完美封面</button>
     </div>
 </div>
@@ -204,6 +213,7 @@
 <script>
     const uploadInput = document.getElementById('uploadInput');
     const startCameraBtn = document.getElementById('startCameraBtn');
+    const switchCameraBtn = document.getElementById('switchCameraBtn'); // 👈 新增
     const shutterBtn = document.getElementById('shutterBtn');
     const templateSelect = document.getElementById('templateSelect');
     const userImagePreview = document.getElementById('userImagePreview');
@@ -220,15 +230,14 @@
     let originalImg = new Image();
     let imgLoaded = false;
     let videoStream = null;
+    let currentFacingMode = 'environment'; // 👈 新增：預設使用後鏡頭 ('environment')，前鏡頭為 ('user')
 
-    // 版型切換
     templateSelect.addEventListener('change', function() {
         templateImg.src = this.value;
     });
 
-    // 處理相簿選圖
     uploadInput.addEventListener('change', function(e) {
-        stopCamera(); // 若相機開著，先關閉
+        stopCamera();
         const file = e.target.files[0];
         if (!file) return;
 
@@ -239,7 +248,6 @@
         reader.readAsDataURL(file);
     });
 
-    // 將圖片載入預覽與滑桿控制
     function loadToCanvas(dataUrl) {
         userImagePreview.src = dataUrl;
         userImagePreview.style.display = 'block';
@@ -259,57 +267,80 @@
         }
     }
 
-    // 🎥 啟動即時相機
-    startCameraBtn.addEventListener('click', async function() {
+    // 🎥 啟動/切換相機的共用函數
+    async function startCamera() {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            alert("您的瀏覽器不支援即時相機功能，請改用相簿上傳。");
+            alert("您的瀏覽器不支援即時相機功能。");
             return;
         }
+
+        // 如果原本已經有開相機，先關閉舊的訊號源再換鏡頭
+        if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+        }
+
         try {
-            // 請求手機後置鏡頭
             videoStream = await navigator.mediaDevices.getUserMedia({ 
-                video: { facingMode: 'environment' } 
+                video: { facingMode: currentFacingMode } 
             });
             liveVideo.srcObject = videoStream;
             liveVideo.style.display = 'block';
-            userImagePreview.style.display = 'none'; // 隱藏靜態圖
+            userImagePreview.style.display = 'none';
             
-            // UI 切換：顯示拍照按鈕，隱藏下載按鈕與禁用滑桿
+            // 顯示相機控制按鈕
+            switchCameraBtn.style.display = 'block';
             shutterBtn.style.display = 'block';
             downloadBtn.style.display = 'none';
             scaleSlider.disabled = true;
             posXSlider.disabled = true;
             posYSlider.disabled = true;
         } catch (err) {
-            alert("無法開啟相機，請確認您已允許網頁使用相機權限！");
+            alert("無法開啟相機，請確認您已允許相機權限！");
         }
+    }
+
+    // 點擊「即時相機」啟動
+    startCameraBtn.addEventListener('click', function() {
+        currentFacingMode = 'environment'; // 每次按這顆大按鈕，都預設先開後鏡頭
+        startCamera();
+    });
+
+    // 🔄 點擊「切換前後鏡頭」
+    switchCameraBtn.addEventListener('click', function() {
+        // 如果當前是後鏡頭就換前鏡頭，反之亦然
+        currentFacingMode = (currentFacingMode === 'environment') ? 'user' : 'environment';
+        startCamera(); // 重新啟動鏡頭
     });
 
     // ⏺ 拍下照片
     shutterBtn.addEventListener('click', function() {
         if (!videoStream) return;
 
-        // 建立一個暫存畫布來擷取當前影片的一幀
         const tempCanvas = document.createElement('canvas');
         tempCanvas.width = liveVideo.videoWidth;
         tempCanvas.height = liveVideo.videoHeight;
         const tempCtx = tempCanvas.getContext('2d');
-        tempCtx.drawImage(liveVideo, 0, 0, tempCanvas.width, tempCanvas.height);
+        
+        // 💡 密技：如果是用前鏡頭(自拍)，要把畫面左右反轉回來，拍照才不會怪怪的
+        if (currentFacingMode === 'user') {
+            tempCtx.translate(tempCanvas.width, 0);
+            tempCtx.scale(-1, 1);
+        }
 
-        // 將那一格畫面轉成圖片 URL
+        tempCtx.drawImage(liveVideo, 0, 0, tempCanvas.width, tempCanvas.height);
         const dataUrl = tempCanvas.toDataURL('image/png');
         
-        stopCamera(); // 拍照完關閉相機
-        loadToCanvas(dataUrl); // 丟回原本的處理流程，允許使用者微調與下載
+        stopCamera();
+        loadToCanvas(dataUrl);
     });
 
-    // 停止相機的共用函數
     function stopCamera() {
         if (videoStream) {
             videoStream.getTracks().forEach(track => track.stop());
             videoStream = null;
         }
         liveVideo.style.display = 'none';
+        switchCameraBtn.style.display = 'none';
         shutterBtn.style.display = 'none';
         downloadBtn.style.display = 'block';
     }
@@ -325,7 +356,7 @@
     posXSlider.addEventListener('input', updatePreview);
     posYSlider.addEventListener('input', updatePreview);
 
-// === 進階版：支援手機原生分享與相簿儲存 ===
+    // 下載與分享合成
     downloadBtn.addEventListener('click', function() {
         if (!imgLoaded) return;
         ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
@@ -352,14 +383,11 @@
         const selectedTemplateName = templateSelect.options[templateSelect.selectedIndex].text;
         const fileName = `我的封面_${selectedTemplateName}.png`;
 
-        // 轉換 Canvas 為 Blob 檔案物件 (為了讓手機原生系統能看懂這張圖片)
         mainCanvas.toBlob(async function(blob) {
             const file = new File([blob], fileName, { type: 'image/png' });
 
-            // 檢查設備是否支援原生分享功能
             if (navigator.canShare && navigator.canShare({ files: [file] })) {
                 try {
-                    // 呼叫手機的原生分享面板 (會出現「儲存影像」或分享到其他 App 的選項)
                     await navigator.share({
                         files: [file],
                         title: '專屬封面',
@@ -369,7 +397,6 @@
                     console.log('分享取消或發生錯誤:', err);
                 }
             } else {
-                // 如果是電腦版，或是設備太舊不支援分享，退回原本的直接下載模式
                 const link = document.createElement('a');
                 link.download = fileName;
                 link.href = URL.createObjectURL(blob);
@@ -378,6 +405,12 @@
             }
         }, 'image/png');
     });
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('data:text/javascript,console.log("PWA SW registered");').catch(()=>{});
+        });
+    }
 </script>
 
 </body>
