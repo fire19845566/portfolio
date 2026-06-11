@@ -1,6 +1,6 @@
 {
-  "name": "封面版型產生器",
-  "short_name": "封面工具",
+  "name": "FNFN封面產生器",
+  "short_name": "FN封面",
   "start_url": "./cover.html",
   "display": "standalone",
   "background_color": "#f3f4f6",
