@@ -83,3 +83,211 @@
         }
         input[type="range"] {
             flex: 1;
+        }
+        button {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #1d4ed8;
+        }
+        button:disabled {
+            background-color: #9ca3af;
+            cursor: not-allowed;
+        }
+        /* 美化的上傳與拍照按鈕 */
+        .btn-upload {
+            flex: 1;
+            background-color: #f3f4f6;
+            color: #374151;
+            border: 2px solid #d1d5db;
+            padding: 10px 5px;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.2s;
+            display: inline-block;
+        }
+        .btn-upload:hover {
+            background-color: #e5e7eb;
+        }
+        #mainCanvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 style="text-align: center; margin: 0;">封面版型產生器</h2>
+    <p style="text-align: center; color: #6b7280; margin: 0; font-size: 14px;">輸出尺寸：1153 x 1488 px</p>
+    
+    <div class="preview-container" id="previewBox">
+        <img id="userImagePreview" src="" alt="使用者照片">
+        <img class="template-overlay" id="templateImg" src="cover_1153x1488.png" alt="文字模板" onerror="this.src='https://placehold.co/1153x1488/png?text=Preview'">
+    </div>
+
+    <div class="control-panel">
+        
+        <div class="control-group">
+            <label class="title">1. 照片來源</label>
+            <div style="display: flex; gap: 10px; flex: 1;">
+                <label class="btn-upload">
+                    📁 相簿選圖
+                    <input type="file" id="uploadInput" accept="image/*" style="display: none;">
+                </label>
+                <label class="btn-upload" style="border-color: #10b981; color: #047857;">
+                    📸 立即拍照
+                    <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;">
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="title">1.5. 選擇版型</label>
+            <select id="templateSelect" style="flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #d1d5db; font-size: 14px;">
+                <option value="cover_1153x1488.png">版型 A (原版)</option>
+                <option value="cover_style_B.png">版型 B (新設計)</option>
+            </select>
+        </div>
+        
+        <div class="control-group">
+            <label class="title">2. 縮放大小</label>
+            <input type="range" id="scaleSlider" min="0.1" max="5" step="0.01" value="1" disabled>
+        </div>
+
+        <div class="control-group">
+            <label class="title">3. 左右位移</label>
+            <input type="range" id="posXSlider" min="-800" max="800" step="1" value="0" disabled>
+        </div>
+
+        <div class="control-group">
+            <label class="title">4. 上下位移</label>
+            <input type="range" id="posYSlider" min="-800" max="800" step="1" value="0" disabled>
+        </div>
+
+        <button id="downloadBtn" disabled>5. 產生並下載完美封面</button>
+    </div>
+</div>
+
+<canvas id="mainCanvas" width="1153" height="1488"></canvas>
+
+<script>
+    const uploadInput = document.getElementById('uploadInput');
+    const cameraInput = document.getElementById('cameraInput');
+    const templateSelect = document.getElementById('templateSelect');
+    const userImagePreview = document.getElementById('userImagePreview');
+    const templateImg = document.getElementById('templateImg');
+    const scaleSlider = document.getElementById('scaleSlider');
+    const posXSlider = document.getElementById('posXSlider');
+    const posYSlider = document.getElementById('posYSlider');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const mainCanvas = document.getElementById('mainCanvas');
+    const ctx = mainCanvas.getContext('2d');
+    const previewBox = document.getElementById('previewBox');
+
+    let originalImg = new Image();
+    let imgLoaded = false;
+
+    // 監聽版型選單變化，即時更換上層 PNG
+    templateSelect.addEventListener('change', function() {
+        templateImg.src = this.value;
+    });
+
+    // 獨立處理圖片讀取的邏輯 (相簿與相機共用)
+    function handleImageUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            userImagePreview.src = event.target.result;
+            userImagePreview.style.display = 'block';
+            
+            originalImg.src = event.target.result;
+            originalImg.onload = function() {
+                imgLoaded = true;
+                scaleSlider.disabled = false;
+                posXSlider.disabled = false;
+                posYSlider.disabled = false;
+                downloadBtn.disabled = false;
+                
+                scaleSlider.value = 1;
+                posXSlider.value = 0;
+                posYSlider.value = 0;
+                updatePreview();
+            }
+        }
+        reader.readAsDataURL(file);
+    }
+
+    uploadInput.addEventListener('change', handleImageUpload);
+    cameraInput.addEventListener('change', handleImageUpload);
+
+    function updatePreview() {
+        const scale = scaleSlider.value;
+        const x = posXSlider.value;
+        const y = posYSlider.value;
+        userImagePreview.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px) scale(${scale})`;
+    }
+
+    scaleSlider.addEventListener('input', updatePreview);
+    posXSlider.addEventListener('input', updatePreview);
+    posYSlider.addEventListener('input', updatePreview);
+
+    // 畫布合成與下載
+    downloadBtn.addEventListener('click', function() {
+        if (!imgLoaded) return;
+
+        ctx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+
+        const scale = parseFloat(scaleSlider.value);
+        // 動態取得目前網頁預覽框的實際寬度，計算正確的放大倍率
+        const currentPreviewWidth = previewBox.offsetWidth;
+        const canvasScaleRatio = mainCanvas.width / currentPreviewWidth; 
+        
+        const xOffset = parseFloat(posXSlider.value) * canvasScaleRatio;
+        const yOffset = parseFloat(posYSlider.value) * canvasScaleRatio;
+
+        ctx.save();
+        ctx.translate(mainCanvas.width / 2 + xOffset, mainCanvas.height / 2 + yOffset);
+        
+        const previewDisplayWidth = currentPreviewWidth;
+        const previewDisplayHeight = previewDisplayWidth * (originalImg.height / originalImg.width);
+        
+        const drawW = previewDisplayWidth * scale * canvasScaleRatio;
+        const drawH = previewDisplayHeight * scale * canvasScaleRatio;
+        
+        ctx.drawImage(originalImg, -drawW / 2, -drawH / 2, drawW, drawH);
+        ctx.restore();
+
+        ctx.drawImage(templateImg, 0, 0, mainCanvas.width, mainCanvas.height);
+
+        const link = document.createElement('a');
+        // 依照選取的版型命名下載檔案
+        const selectedTemplateName = templateSelect.options[templateSelect.selectedIndex].text;
+        link.download = `我的封面_${selectedTemplateName}.png`;
+        link.href = mainCanvas.toDataURL('image/png');
+        link.click();
+    });
+
+    // 註冊 PWA Service Worker (讓手機視為 App 的必要條件)
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('data:text/javascript,console.log("PWA SW registered");').catch(()=>{});
+        });
+    }
+</script>
+
+</body>
+</html>
