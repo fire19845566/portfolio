@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寶寶泡奶水溫調配計算器 | Aquafire Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#0ea5e9',
+                        babyPink: '#fdf2f8',
+                        hotCyan: '#ef4444',
+                        coldBlue: '#3b82f6'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-700 min-h-screen flex items-center justify-center p-4 md:p-8">
+
+    <div class="w-full max-w-md bg-white rounded-3xl border border-slate-200/80 shadow-xl overflow-hidden transition-all duration-300">
+        
+        <!-- 頂部標題區 -->
+        <div class="bg-gradient-to-r from-sky-400 to-blue-500 p-6 text-white relative overflow-hidden">
+            <div class="absolute -right-4 -bottom-4 text-white/10 text-9xl pointer-events-none">
+                <i class="ph ph-baby"></i>
+            </div>
+            <div class="flex items-center gap-3 relative z-10">
+                <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-xl backdrop-blur-sm">
+                    <i class="ph-fill ph-drop"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-wide">泡奶水溫計算器</h1>
+                    <p class="text-xs text-sky-100 mt-0.5">Feel Now / Find Next ・ 生活不手忙腳亂</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 內容輸入區 -->
+        <div class="p-6 space-y-6">
+            
+            <!-- 模式快捷切換 -->
+            <div>
+                <label class="block text-xs font-bold tracking-wider text-slate-400 uppercase mb-2">目標情境快捷鍵</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <button type="button" onclick="setPresetTemp(70)" class="flex flex-col items-center justify-center p-3 rounded-2xl border-2 border-rose-100 hover:border-rose-400 bg-rose-50/30 text-rose-600 transition-all group">
+                        <i class="ph-fill ph-shield-check text-xl mb-1 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-bold text-sm">70°C WHO 殺菌</span>
+                    </button>
+                    <button type="button" onclick="setPresetTemp(40)" class="flex flex-col items-center justify-center p-3 rounded-2xl border-2 border-amber-100 hover:border-amber-400 bg-amber-50/30 text-amber-600 transition-all group">
+                        <i class="ph-fill ph-smiley text-xl mb-1 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-bold text-sm">40°C 即飲溫水</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 總奶量設定 -->
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <label for="totalVolume" class="text-sm font-bold text-slate-800">1. 需要的總水量 (ml)</label>
+                    <span id="volumeDisplay" class="text-lg font-extrabold text-brand">120 ml</span>
+                </div>
+                <input type="range" id="totalVolume" min="30" max="360" step="10" value="120" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-brand">
+                
+                <!-- 奶量快捷鈕 -->
+                <div class="grid grid-cols-6 gap-1.5 mt-3 text-xs font-semibold text-slate-500">
+                    <button onclick="setVolume(90)" class="py-1.5 bg-slate-100 hover:bg-brand hover:text-white rounded-lg transition-colors">90</button>
+                    <button onclick="setVolume(120)" class="py-1.5 bg-slate-100 hover:bg-brand hover:text-white rounded-lg transition-colors">120</button>
+                    <button onclick="setVolume(150)" class="py-1.5 bg-slate-100 hover:bg-brand hover:text-white rounded-lg transition-colors">150</button>
+                    <button onclick="setVolume(180)" class="py-1.5 bg-slate-100 hover:bg-brand hover:text-white rounded-lg transition-colors">180</button>
+                    <button onclick="setVolume(210)" class="py-1.5 bg-slate-100 hover:bg-brand hover:text-white rounded-lg transition-colors">210</button>
+                    <button onclick="setVolume(240)" class="py-1.5 bg-slate-100 hover:bg-brand hover:text-white rounded-lg transition-colors">240</button>
+                </div>
+            </div>
+
+            <hr class="border-slate-100">
+
+            <!-- 溫度微調與進階設定 -->
+            <div class="space-y-4">
+                <div>
+                    <div class="flex justify-between items-center mb-1.5">
+                        <label for="targetTemp" class="text-xs font-bold text-slate-500">目標水溫 (°C)</label>
+                        <span id="targetTempDisplay" class="text-sm font-bold text-slate-800">70°C</span>
+                    </div>
+                    <input type="range" id="targetTemp" min="35" max="80" step="10" value="70" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-700">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="hotTemp" class="block text-xs font-bold text-slate-500 mb-1">熱水水溫 (°C)</label>
+                        <div class="relative">
+                            <input type="number" id="hotTemp" value="100" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm font-bold text-rose-600 focus:outline-none focus:border-rose-400">
+                            <span class="absolute right-3 top-2 text-xs text-slate-400">沸水</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="coldTemp" class="block text-xs font-bold text-slate-500 mb-1">常溫涼水 (°C)</label>
+                        <div class="relative">
+                            <input type="number" id="coldTemp" value="25" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm font-bold text-blue-600 focus:outline-none focus:border-blue-400">
+                            <span class="absolute right-3 top-2 text-xs text-slate-400">室溫</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 計算結果面板 -->
+            <div class="bg-slate-50 border border-slate-100 rounded-2xl p-5 space-y-4">
+                <div class="text-xs font-bold text-slate-400 tracking-wider uppercase">調配沖泡比例</div>
+                
+                <!-- 雙色比例條 -->
+                <div class="w-full h-4 rounded-full overflow-hidden flex bg-slate-200 shadow-inner">
+                    <div id="hotBar" class="bg-gradient-to-r from-red-400 to-rose-500 transition-all duration-300" style="width: 60%"></div>
+                    <div id="coldBar" class="bg-gradient-to-r from-blue-400 to-sky-500 transition-all duration-300" style="width: 40%"></div>
+                </div>
+
+                <!-- 數字詳細結果 -->
+                <div class="grid grid-cols-2 gap-3 text-center">
+                    <div class="bg-white p-3 rounded-xl border border-slate-200/60 shadow-sm">
+                        <div class="flex items-center justify-center gap-1 text-rose-500 font-bold text-xs mb-0.5">
+                            <i class="ph-fill ph-thermometer-hot text-sm"></i> 加熱水
+                        </div>
+                        <div id="hotResult" class="text-xl font-extrabold text-slate-900">-- <span class="text-xs font-medium text-slate-400">ml</span></div>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border border-slate-200/60 shadow-sm">
+                        <div class="flex items-center justify-center gap-1 text-blue-500 font-bold text-xs mb-0.5">
+                            <i class="ph-fill ph-thermometer-cold text-sm"></i> 加涼水
+                        </div>
+                        <div id="coldResult" class="text-xl font-extrabold text-slate-900">-- <span class="text-xs font-medium text-slate-400">ml</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 頁尾宣告 -->
+        <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 text-center text-xs text-slate-400 flex items-center justify-center gap-1.5">
+            <span>&copy; 2026 Aquafire Studio. Built for Baby.</span>
+        </div>
+    </div>
+
+    <script>
+        const totalVolumeInput = document.getElementById('totalVolume');
+        const targetTempInput = document.getElementById('targetTemp');
+        const hotTempInput = document.getElementById('hotTemp');
+        const coldTempInput = document.getElementById('coldTemp');
+
+        const volumeDisplay = document.getElementById('volumeDisplay');
+        const targetTempDisplay = document.getElementById('targetTempDisplay');
+        
+        const hotResult = document.getElementById('hotResult');
+        const coldResult = document.getElementById('coldResult');
+        const hotBar = document.getElementById('hotBar');
+        const coldBar = document.getElementById('coldBar');
+
+        function calculateWaterMixing() {
+            const V_total = parseFloat(totalVolumeInput.value);
+            const T_target = parseFloat(targetTempInput.value);
+            const T_hot = parseFloat(hotTempInput.value);
+            const T_cold = parseFloat(coldTempInput.value);
+
+            // 更新畫面上滑桿的純文字顯示
+            volumeDisplay.innerText = `${V_total} ml`;
+            targetTempDisplay.innerText = `${T_target}°C`;
+
+            // 防呆與極端值處理
+            if (T_hot <= T_cold) {
+                hotResult.innerHTML = `${V_total} <span class="text-xs font-medium text-slate-400">ml</span>`;
+                coldResult.innerHTML = `0 <span class="text-xs font-medium text-slate-400">ml</span>`;
+                hotBar.style.width = '100%';
+                coldBar.style.width = '0%';
+                return;
+            }
+
+            // 熱平衡公式：V_hot = V_total * (T_target - T_cold) / (T_hot - T_cold)
+            let V_hot = V_total * (T_target - T_cold) / (T_hot - T_cold);
+            
+            // 邊界限制安全防護
+            if (V_hot > V_total) V_hot = V_total;
+            if (V_hot < 0) V_hot = 0;
+
+            V_hot = Math.round(V_hot);
+            const V_cold = V_total - V_hot;
+
+            // 輸出結果
+            hotResult.innerHTML = `${V_hot} <span class="text-xs font-medium text-slate-400">ml</span>`;
+            coldResult.innerHTML = `${V_cold} <span class="text-xs font-medium text-slate-400">ml</span>`;
+
+            // 計算動態視覺比例條
+            const hotPercentage = (V_hot / V_total) * 100;
+            const coldPercentage = 100 - hotPercentage;
+            hotBar.style.width = `${hotPercentage}%`;
+            coldBar.style.width = `${coldPercentage}%`;
+        }
+
+        // 快捷功能函數
+        function setVolume(val) {
+            totalVolumeInput.value = val;
+            calculateWaterMixing();
+        }
+
+        function setPresetTemp(val) {
+            targetTempInput.value = val;
+            calculateWaterMixing();
+        }
+
+        // 綁定動態監聽事件
+        [totalVolumeInput, targetTempInput, hotTempInput, coldTempInput].forEach(element => {
+            element.addEventListener('input', calculateWaterMixing);
+            element.addEventListener('change', calculateWaterMixing);
+        });
+
+        // 初始載入時先計算一次
+        calculateWaterMixing();
+    </script>
+</body>
+</html>
