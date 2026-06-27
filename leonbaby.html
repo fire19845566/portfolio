@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>寶寶成長紀錄</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f3f4f6; margin: 0; padding: 0; display: flex; justify-content: center; padding-bottom: 80px; }
+        .app-container { width: 100%; max-width: 480px; background-color: #ffffff; min-height: 100vh; box-shadow: 0 0 10px rgba(0,0,0,0.05); position: relative; }
+        
+        /* 頂部 Header */
+        .header { background-color: #2563eb; color: white; padding: 20px; position: sticky; top: 0; z-index: 10; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .header h1 { margin: 0; font-size: 20px; }
+        .header p { margin: 5px 0 0 0; font-size: 14px; opacity: 0.9; }
+        .export-btn { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.5); color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .export-btn:active { background: rgba(255,255,255,0.4); }
+
+        /* 時間軸區域 */
+        .timeline { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .record-card { background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 15px; display: flex; align-items: flex-start; gap: 15px; animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .record-icon { font-size: 24px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; flex-shrink: 0; }
+        .record-content { flex: 1; }
+        .record-time { font-size: 12px; color: #6b7280; margin-bottom: 5px; font-weight: bold; }
+        .record-title { font-size: 16px; font-weight: bold; color: #1f2937; margin: 0 0 5px 0; }
+        .record-detail { font-size: 14px; color: #4b5563; margin: 0; line-height: 1.4; }
+        
+        /* 底部快捷按鈕列 */
+        .bottom-bar { position: fixed; bottom: 0; width: 100%; max-width: 480px; background-color: white; border-top: 1px solid #e5e7eb; display: flex; justify-content: space-around; padding: 10px 0; padding-bottom: env(safe-area-inset-bottom, 10px); box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 100; }
+        .action-btn { background: none; border: none; display: flex; flex-direction: column; align-items: center; gap: 5px; color: #4b5563; font-size: 12px; cursor: pointer; }
+        .action-btn .icon { font-size: 24px; }
+        .action-btn.primary .icon { background-color: #2563eb; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3); margin-top: -15px; }
+        
+        /* 彈出式表單 (Modal) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; justify-content: center; align-items: flex-end; z-index: 200; }
+        .modal-content { background-color: white; width: 100%; max-width: 480px; border-top-left-radius: 20px; border-top-right-radius: 20px; padding: 20px; box-sizing: border-box; animation: slideUp 0.3s ease-out; max-height: 90vh; overflow-y: auto; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .modal-header h2 { margin: 0; font-size: 18px; }
+        .close-btn { background: #f3f4f6; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 16px; cursor: pointer; }
+        
+        /* 表單元素 */
+        .form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 8px; }
+        .form-group label { font-size: 14px; font-weight: bold; color: #374151; }
+        .form-group input[type="time"], .form-group select, .form-group input[type="text"], .form-group input[type="number"] { padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 16px; }
+        .time-btn { flex: 1; background-color: #f3f4f6; border: 1px solid #d1d5db; padding: 5px; border-radius: 6px; font-size: 14px; color: #4b5563; cursor: pointer; }
+        .time-btn:active { background-color: #e5e7eb; }
+        .save-btn { background-color: #2563eb; color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-size: 16px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        .checkbox-group { display: flex; flex-direction: column; gap: 10px; }
+        .checkbox-label { display: flex; align-items: center; gap: 10px; background-color: #f9fafb; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 16px; cursor: pointer; }
+        .checkbox-label input[type="checkbox"] { width: 20px; height: 20px; accent-color: #2563eb; }
+        .hint-text { font-size: 12px; color: #ef4444; margin-top: -5px; margin-bottom: 5px; }
+        .duration-display { background-color: #e0e7ff; color: #3730a3; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; font-size: 16px; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="header">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <h1 style="text-align: left;">寶寶成長紀錄 ☁️</h1>
+                <p id="today-date" style="text-align: left;"></p>
+            </div>
+            <button id="export-btn" class="export-btn">📤 匯出</button>
+        </div>
+    </div>
+
+    <div class="timeline" id="timeline-container">
+        <p style="text-align: center; color: #9ca3af; font-size: 14px;">載入資料中...</p>
+    </div>
+
+    <div class="bottom-bar">
+        <button class="action-btn" id="open-supp-btn"><span class="icon">💊</span><span>營養品</span></button>
+        <button class="action-btn" id="open-solid-btn"><span class="icon">🥣</span><span>副食品</span></button>
+        <button class="action-btn primary" id="open-milk-btn"><span class="icon">🍼</span><span>記奶量</span></button>
+        <button class="action-btn" id="open-poop-btn"><span class="icon">💩</span><span>記排便</span></button>
+        <button class="action-btn" id="open-activity-btn"><span class="icon">🧸</span><span>作息</span></button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="milk-modal">
+    <div class="modal-content">
+        <div class="modal-header"><h2>🍼 記錄奶量</h2><button class="close-btn" id="close-milk-btn">✕</button></div>
+        <div class="form-group">
+            <label>時間</label>
+            <input type="time" id="milk-time">
+            <div style="display: flex; gap: 8px; margin-top: 5px;">
+                <button class="time-btn" onclick="window.adjustTime('milk-time', 15)">-15分</button>
+                <button class="time-btn" onclick="window.adjustTime('milk-time', 30)">-30分</button>
+                <button class="time-btn" onclick="window.adjustTime('milk-time', 60)">-1小時</button>
+            </div>
+        </div>
+        <div class="form-group"><label>種類</label><select id="milk-type"><option value="配方奶">配方奶</option><option value="母奶 (瓶餵)">母奶 (瓶餵)</option><option value="親餵">親餵 (分鐘)</option></select></div>
+        <div class="form-group">
+            <label>奶量 (ml) / 時間 (分鐘)</label>
+            <div style="display: flex; gap: 10px; align-items: center;"><input type="range" id="milk-slider" min="10" max="300" step="10" value="150" style="flex: 1;"><input type="number" id="milk-amount" value="150" style="width: 70px; text-align: center;"></div>
+        </div>
+        <div class="form-group"><label>備註 (選填)</label><input type="text" id="milk-note" placeholder="例如：喝得很順"></div>
+        <button class="save-btn" id="save-milk-btn">上傳雲端紀錄</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="supp-modal">
+    <div class="modal-content">
+        <div class="modal-header"><h2>💊 記錄營養品</h2><button class="close-btn" id="close-supp-btn">✕</button></div>
+        <div class="form-group">
+            <label>時間</label><input type="time" id="supp-time">
+            <div style="display: flex; gap: 8px; margin-top: 5px;"><button class="time-btn" onclick="window.adjustTime('supp-time', 15)">-15分</button><button class="time-btn" onclick="window.adjustTime('supp-time', 30)">-30分</button><button class="time-btn" onclick="window.adjustTime('supp-time', 60)">-1小時</button></div>
+        </div>
+        <div class="form-group">
+            <label>補充項目 (可多選)</label><div class="hint-text">💡 提醒：鐵劑建議與配方奶間隔一段時間喔！</div>
+            <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox" class="supp-item" value="益生菌"> 益生菌</label>
+                <label class="checkbox-label"><input type="checkbox" class="supp-item" value="嬰兒魚油滴劑"> 嬰兒魚油滴劑</label>
+                <label class="checkbox-label"><input type="checkbox" class="supp-item" value="維他命 D3"> 維他命 D3</label>
+                <label class="checkbox-label"><input type="checkbox" class="supp-item" value="綜合維他命"> 綜合維他命</label>
+                <label class="checkbox-label"><input type="checkbox" class="supp-item" value="鐵劑"> 鐵劑</label>
+            </div>
+        </div>
+        <div class="form-group"><label>備註 (選填)</label><input type="text" id="supp-note" placeholder="例如：加在副食品中"></div>
+        <button class="save-btn" id="save-supp-btn">上傳雲端紀錄</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="poop-modal">
+    <div class="modal-content">
+        <div class="modal-header"><h2>💩 記錄排便</h2><button class="close-btn" id="close-poop-btn">✕</button></div>
+        <div class="form-group">
+            <label>時間</label><input type="time" id="poop-time">
+            <div style="display: flex; gap: 8px; margin-top: 5px;"><button class="time-btn" onclick="window.adjustTime('poop-time', 15)">-15分</button><button class="time-btn" onclick="window.adjustTime('poop-time', 30)">-30分</button><button class="time-btn" onclick="window.adjustTime('poop-time', 60)">-1小時</button></div>
+        </div>
+        <div class="form-group"><label>大便狀態</label><select id="poop-status"><option value="正常軟糊" selected>正常軟糊</option><option value="偏稀水狀">偏稀水狀</option><option value="偏硬顆粒">偏硬顆粒</option><option value="無特別">無特別</option></select></div>
+        <div class="form-group"><label>備註 (選填)</label><input type="text" id="poop-note" placeholder="例如：顏色偏綠"></div>
+        <button class="save-btn" id="save-poop-btn">上傳雲端紀錄</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="solid-modal">
+    <div class="modal-content">
+        <div class="modal-header"><h2>🥣 記錄副食品</h2><button class="close-btn" id="close-solid-btn">✕</button></div>
+        <div class="form-group">
+            <label>時間</label><input type="time" id="solid-time">
+            <div style="display: flex; gap: 8px; margin-top: 5px;"><button class="time-btn" onclick="window.adjustTime('solid-time', 15)">-15分</button><button class="time-btn" onclick="window.adjustTime('solid-time', 30)">-30分</button><button class="time-btn" onclick="window.adjustTime('solid-time', 60)">-1小時</button></div>
+        </div>
+        <div class="form-group"><label>今日食材</label><input type="text" id="solid-ingredients" placeholder="例如：十倍粥、南瓜泥"></div>
+        <div class="form-group">
+            <label>進食量 (g)</label>
+            <div style="display: flex; gap: 10px; align-items: center;"><input type="range" id="solid-slider" min="10" max="200" step="5" value="50" style="flex: 1;"><input type="number" id="solid-amount" value="50" style="width: 70px; text-align: center;"></div>
+        </div>
+        <div class="form-group"><label>過敏反應</label><select id="solid-reaction"><option value="無特別" selected>無特別 ✅</option><option value="皮膚發紅 ⚠️">皮膚發紅 ⚠️</option><option value="輕微起疹 ⚠️">輕微起疹 ⚠️</option><option value="腹瀉狀況 ⚠️">腹瀉狀況 ⚠️</option></select></div>
+        <div class="form-group"><label>備註 (選填)</label><input type="text" id="solid-note" placeholder="例如：吃得很開心"></div>
+        <button class="save-btn" id="save-solid-btn">上傳雲端紀錄</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="activity-modal">
+    <div class="modal-content">
+        <div class="modal-header"><h2>🧸 記錄活動與睡眠</h2><button class="close-btn" id="close-activity-btn">✕</button></div>
+        <div class="form-group"><label>紀錄項目</label><select id="activity-type"><option value="睡眠">睡眠 🌙</option><option value="運動 (Tummy Time)">運動 (Tummy Time) 🏃</option><option value="親子共讀">親子共讀 📚</option><option value="外出散步">外出散步 🌳</option></select></div>
+        <div class="form-group">
+            <label>開始時間</label><input type="time" id="activity-start-time">
+            <div style="display: flex; gap: 8px; margin-top: 5px;"><button class="time-btn" onclick="window.adjustTime('activity-start-time', 15)">-15分</button><button class="time-btn" onclick="window.adjustTime('activity-start-time', 30)">-30分</button><button class="time-btn" onclick="window.adjustTime('activity-start-time', 60)">-1小時</button></div>
+        </div>
+        <div class="form-group">
+            <label>結束時間</label><input type="time" id="activity-end-time">
+            <div style="display: flex; gap: 8px; margin-top: 5px;"><button class="time-btn" onclick="window.adjustTime('activity-end-time', 15)">-15分</button><button class="time-btn" onclick="window.adjustTime('activity-end-time', 30)">-30分</button><button class="time-btn" onclick="window.adjustTime('activity-end-time', 60)">-1小時</button></div>
+        </div>
+        <div class="duration-display" id="activity-duration-display">總時長：計算中...</div>
+        <div class="form-group" style="margin-top: 15px;"><label>備註 (選填)</label><input type="text" id="activity-note" placeholder="例如：睡得很熟"></div>
+        <button class="save-btn" id="save-activity-btn">上傳雲端紀錄</button>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // Firebase 專屬鑰匙
+    const firebaseConfig = {
+      apiKey: "AIzaSyClnPOypkloQBfzQCIc6S2tODTWU7jgZOg",
+      authDomain: "leonbaby0919.firebaseapp.com",
+      projectId: "leonbaby0919",
+      storageBucket: "leonbaby0919.firebasestorage.app",
+      messagingSenderId: "999183503031",
+      appId: "1:999183503031:web:02bfd939b358db9ea70732"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // 日期顯示
+    document.getElementById('today-date').innerText = new Date().toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+    
+    // 時光機功能
+    window.adjustTime = function(inputId, minutesToSubtract) {
+        const input = document.getElementById(inputId);
+        const [hours, minutes] = input.value.split(':').map(Number);
+        let date = new Date();
+        date.setHours(hours); date.setMinutes(minutes - minutesToSubtract);
+        input.value = date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0');
+        input.dispatchEvent(new Event('input'));
+    };
+
+    // --- 📡 即時監聽與繪製時間軸 ---
+    const timelineContainer = document.getElementById('timeline-container');
+    const qRealtime = query(collection(db, "baby_records"), orderBy("createdAt", "desc"));
+    
+    onSnapshot(qRealtime, (snapshot) => {
+        timelineContainer.innerHTML = ''; 
+        if(snapshot.empty) {
+            timelineContainer.innerHTML = '<p style="text-align: center; color: #9ca3af; font-size: 14px;">目前還沒有紀錄喔，趕快新增第一筆吧！</p>';
+            return;
+        }
+        
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            const noteHtml = data.note ? `<br><span style="color:#6b7280; font-size:12px;">📝 ${data.note}</span>` : '';
+            const newCardHTML = `
+                <div class="record-card">
+                    <div class="record-icon" style="background-color: ${data.iconBg}; color: ${data.iconColor};">${data.icon}</div>
+                    <div class="record-content">
+                        <div class="record-time">${data.time}</div>
+                        <h3 class="record-title">${data.title}</h3>
+                        <p class="record-detail">${data.detail}${noteHtml}</p>
+                    </div>
+                </div>
+            `;
+            timelineContainer.insertAdjacentHTML('beforeend', newCardHTML);
+        });
+    });
+
+    // --- 💾 雲端上傳共用函數 ---
+    async function uploadToCloud(recordData) {
+        try {
+            recordData.createdAt = new Date().getTime(); 
+            await addDoc(collection(db, "baby_records"), recordData);
+        } catch (e) {
+            console.error("儲存失敗: ", e);
+            alert("上傳失敗，請確認 Firebase 資料庫已經開啟「測試模式」喔！");
+        }
+    }
+
+    // --- 各表單邏輯綁定 ---
+    // 🍼 奶量
+    const milkModal = document.getElementById('milk-modal');
+    document.getElementById('open-milk-btn').onclick = () => { milkModal.style.display = 'flex'; document.getElementById('milk-time').value = new Date().toTimeString().slice(0,5); };
+    document.getElementById('close-milk-btn').onclick = () => milkModal.style.display = 'none';
+    const milkSlider = document.getElementById('milk-slider'), milkAmount = document.getElementById('milk-amount');
+    milkSlider.oninput = (e) => milkAmount.value = e.target.value; milkAmount.oninput = (e) => milkSlider.value = e.target.value;
+    document.getElementById('save-milk-btn').onclick = () => {
+        const type = document.getElementById('milk-type').value; const amount = milkAmount.value;
+        uploadToCloud({ icon: '🍼', iconBg: '#e0e7ff', iconColor: '#1f2937', time: document.getElementById('milk-time').value, title: type, detail: `${amount}${type === '親餵' ? '分鐘' : 'ml'}`, note: document.getElementById('milk-note').value });
+        milkModal.style.display = 'none'; document.getElementById('milk-note').value = '';
+    };
+
+    // 💊 營養品
+    const suppModal = document.getElementById('supp-modal');
+    document.getElementById('open-supp-btn').onclick = () => { suppModal.style.display = 'flex'; document.getElementById('supp-time').value = new Date().toTimeString().slice(0,5); };
+    document.getElementById('close-supp-btn').onclick = () => suppModal.style.display = 'none';
+    document.getElementById('save-supp-btn').onclick = () => {
+        const checkboxes = document.querySelectorAll('.supp-item:checked');
+        if (checkboxes.length === 0) { alert('請至少勾選一項喔！'); return; }
+        uploadToCloud({ icon: '💊', iconBg: '#fef3c7', iconColor: '#1f2937', time: document.getElementById('supp-time').value, title: '補充營養品', detail: Array.from(checkboxes).map(cb => cb.value).join('、'), note: document.getElementById('supp-note').value });
+        suppModal.style.display = 'none'; checkboxes.forEach(cb => cb.checked = false); document.getElementById('supp-note').value = '';
+    };
+
+    // 💩 排便
+    const poopModal = document.getElementById('poop-modal');
+    document.getElementById('open-poop-btn').onclick = () => { poopModal.style.display = 'flex'; document.getElementById('poop-time').value = new Date().toTimeString().slice(0,5); };
+    document.getElementById('close-poop-btn').onclick = () => poopModal.style.display = 'none';
+    document.getElementById('save-poop-btn').onclick = () => {
+        const status = document.getElementById('poop-status').value;
+        uploadToCloud({ icon: '💩', iconBg: '#ffedd5', iconColor: '#1f2937', time: document.getElementById('poop-time').value, title: '換尿布', detail: "排便 💩" + (status !== '無特別' ? ` (${status})` : ''), note: document.getElementById('poop-note').value });
+        poopModal.style.display = 'none'; document.getElementById('poop-note').value = ''; document.getElementById('poop-status').value = '正常軟糊';
+    };
+
+    // 🥣 副食品
+    const solidModal = document.getElementById('solid-modal');
+    const solidSlider = document.getElementById('solid-slider'), solidAmount = document.getElementById('solid-amount');
+    document.getElementById('open-solid-btn').onclick = () => { solidModal.style.display = 'flex'; document.getElementById('solid-time').value = new Date().toTimeString().slice(0,5); };
+    document.getElementById('close-solid-btn').onclick = () => solidModal.style.display = 'none';
+    solidSlider.oninput = (e) => solidAmount.value = e.target.value; solidAmount.oninput = (e) => solidSlider.value = e.target.value;
+    document.getElementById('save-solid-btn').onclick = () => {
+        const food = document.getElementById('solid-ingredients').value.trim() || '未填寫食材'; const reaction = document.getElementById('solid-reaction').value;
+        uploadToCloud({ icon: '🥣', iconBg: '#dcfce7', iconColor: '#1f2937', time: document.getElementById('solid-time').value, title: '副食品', detail: `${food} (${solidAmount.value}g)` + (reaction !== '無特別' ? ` <span style="color:#ef4444;font-weight:bold;">[${reaction}]</span>` : ''), note: document.getElementById('solid-note').value });
+        solidModal.style.display = 'none'; document.getElementById('solid-ingredients').value = ''; document.getElementById('solid-note').value = '';
+    };
+
+    // 🧸 作息與睡眠
+    const activityModal = document.getElementById('activity-modal'), activityStart = document.getElementById('activity-start-time'), activityEnd = document.getElementById('activity-end-time'), durationDisplay = document.getElementById('activity-duration-display');
+    function calcDuration() {
+        if (activityStart.value && activityEnd.value) {
+            let [sH, sM] = activityStart.value.split(':').map(Number); let [eH, eM] = activityEnd.value.split(':').map(Number);
+            let diff = (eH*60+eM) - (sH*60+sM); if(diff < 0) diff += 24*60;
+            let h = Math.floor(diff/60), m = diff%60; durationDisplay.innerText = "總時長：" + (h>0?`${h} 小時 `:'') + `${m} 分鐘`;
+        }
+    }
+    activityStart.oninput = calcDuration; activityEnd.oninput = calcDuration;
+    document.getElementById('open-activity-btn').onclick = () => { activityModal.style.display = 'flex'; const now = new Date(); activityEnd.value = now.toTimeString().slice(0,5); activityStart.value = new Date(now.getTime() - 30*60000).toTimeString().slice(0,5); calcDuration(); };
+    document.getElementById('close-activity-btn').onclick = () => activityModal.style.display = 'none';
+    document.getElementById('save-activity-btn').onclick = () => {
+        const typeStr = document.getElementById('activity-type').value;
+        let config = {icon:'🧸', bg:'#f3f4f6', color:'#1f2937'};
+        if(typeStr==='睡眠') config={icon:'🌙', bg:'#ede9fe', color:'#4c1d95'};
+        else if(typeStr==='運動 (Tummy Time)') config={icon:'🏃', bg:'#dbeafe', color:'#1e40af'};
+        else if(typeStr==='親子共讀') config={icon:'📚', bg:'#fef3c7', color:'#92400e'};
+        else if(typeStr==='外出散步') config={icon:'🌳', bg:'#dcfce7', color:'#166534'};
+        uploadToCloud({ icon: config.icon, iconBg: config.bg, iconColor: config.color, time: `${activityStart.value} - ${activityEnd.value}`, title: typeStr, detail: durationDisplay.innerText.replace('總時長：', '時長：'), note: document.getElementById('activity-note').value });
+        activityModal.style.display = 'none'; document.getElementById('activity-note').value = '';
+    };
+    
+    // 點擊背景關閉 Modal
+    document.querySelectorAll('.modal-overlay').forEach(modal => { modal.onclick = (e) => { if(e.target === modal) modal.style.display = 'none'; }; });
+
+    // --- 📊 匯出資料為 Excel (CSV) 邏輯 ---
+    document.getElementById('export-btn').addEventListener('click', async () => {
+        try {
+            const exportBtn = document.getElementById('export-btn');
+            const originalText = exportBtn.innerText;
+            exportBtn.innerText = '⏳ 處理中...';
+            
+            const qExport = query(collection(db, "baby_records"), orderBy("createdAt", "asc"));
+            const querySnapshot = await getDocs(qExport);
+            
+            if (querySnapshot.empty) {
+                alert("目前還沒有資料可以匯出喔！");
+                exportBtn.innerText = originalText;
+                return;
+            }
+
+            let csvContent = "\uFEFF系統建立時間,作息時間,紀錄類別,詳細內容,備註\n";
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                let createdDate = '';
+                if (data.createdAt) {
+                    const d = new Date(data.createdAt);
+                    createdDate = `${d.getFullYear()}/${(d.getMonth()+1).toString().padStart(2,'0')}/${d.getDate().toString().padStart(2,'0')} ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+                }
+
+                const time = data.time || '';
+                const title = data.title || '';
+                const detailRaw = (data.detail || '').replace(/<[^>]*>?/gm, ''); 
+                const detail = detailRaw.replace(/"/g, '""'); 
+                const note = (data.note || '').replace(/"/g, '""');
+
+                csvContent += `"${createdDate}","${time}","${title}","${detail}","${note}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            
+            const todayStr = new Date().toISOString().split('T')[0];
+            link.setAttribute("download", `寶寶成長紀錄_${todayStr}.csv`);
+            
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            exportBtn.innerText = originalText;
+        } catch (e) {
+            console.error("匯出失敗:", e);
+            alert("匯出失敗，請確認網路連線狀況！");
+            document.getElementById('export-btn').innerText = '📤 匯出';
+        }
+    });
+</script>
+
+</body>
+</html>
