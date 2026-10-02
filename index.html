@@ -2,21 +2,41 @@
 <html lang="zh-TW" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Aquafire 游焰熾的個人設計作品集。擁有超過 10 年平面設計、品牌企劃與活動視覺經驗，將生活感融入設計，提供量身打造的視覺解決方案。">
-    <title>游焰熾 Aquafire | 平面與視覺設計師・品牌形象與活動視覺作品集</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f8fafc">
+    <meta name="color-scheme" content="light dark">
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://unpkg.com" crossorigin>
+    <script>
+        // 在繪製頁面前套用偏好，減少深色模式載入時的閃白。
+        (() => {
+            let preference = 'system';
+            try {
+                const saved = localStorage.getItem('theme');
+                if (saved === 'dark' || saved === 'light') preference = saved;
+            } catch (_) { /* 儲存空間不可用時，改用系統偏好。 */ }
+            const isDark = preference === 'dark' ||
+                (preference === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            document.documentElement.classList.toggle('dark', isDark);
+            document.documentElement.dataset.themePreference = preference;
+            document.querySelector('meta[name="theme-color"]').content = isDark ? '#0f172a' : '#f8fafc';
+        })();
+    </script>
+<title>游焰熾 Aquafire | 平面與視覺設計師・品牌形象與活動視覺作品集</title>
 
     <meta name="description" content="Aquafire 游焰熾的個人設計作品集。擁有超過 10 年經驗，專注於品牌形象設計(VIS)、活動主視覺(KV)、Logo設計與跨媒材整合，提供具備生活感與溫度的專業視覺解決方案。">
 
     <meta name="keywords" content="游焰熾, Aquafire, 平面設計師, 視覺設計, 品牌形象設計, Logo設計, 活動主視覺, KV設計, 珍珠奶茶護照, FNFN ">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script defer src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <script>
-        tailwind.config = {
+        if (window.tailwind) tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        brand: '#0ea5e9', // 稍微調亮一點的 Sky 500 適合白底
+                        brand: '#0ea5e9', // 品牌藍色
                         background: '#f8fafc', // Slate 50 作為網頁主背景
                         surface: '#ffffff', // 純白作為卡片背景
                     },
@@ -29,132 +49,203 @@
     </script>
 
     <style>
-/* 👇 新增：寶寶睡覺模式 (深色模式) 的全域設定 👇 */
-        html {
-            transition: background-color 0.5s ease, color 0.5s ease;
-        }
-        
-        /* 當啟動暗黑模式時，覆蓋原本的明亮色彩 */
-        html.dark body {
-            background-color: #0f172a !important; /* 深邃的夜空藍 */
-            color: #cbd5e1 !important;
-        }
-        html.dark .bg-white, 
-        html.dark .bg-slate-50, 
-        html.dark .bg-slate-100 {
-            background-color: #1e293b !important; /* 卡片與燈箱變成深灰色 */
-            border-color: #334155 !important;
-        }
-        html.dark .text-slate-900 {
-            color: #f8fafc !important; /* 標題變成明亮的白色 */
-        }
-        html.dark .text-slate-600,
-        html.dark .text-slate-700 {
-            color: #94a3b8 !important; /* 內文變成柔和的淺灰色 */
-        }
-        html.dark .border-slate-200 {
-            border-color: #334155 !important;
-        }
-        html.dark nav {
-            background-color: rgba(15, 23, 42, 0.85) !important; /* 導覽列半透明深夜色 */
-        }
-        html.dark #projectModal,
-        html.dark #projectModal .bg-white,
-        html.dark #projectModal .bg-slate-50 {
-            background-color: #0f172a !important; /* 燈箱背景融合夜色 */
-        }
-        /* 👆 新增結束 👆 */
-        /* 自定義捲軸 - 明亮版 */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
-        }
+[data-menu-icon] .menu-close { display: none; }
+[data-menu-icon].is-open .menu-lines { display: none; }
+[data-menu-icon].is-open .menu-close { display: block; }
+/* 自訂樣式集中管理；主要排版沿用原本的 Tailwind 類別。 */
+:root {
+    color-scheme: light;
+    --page-bg: #f8fafc;
+    --surface: #ffffff;
+    --surface-soft: #f1f5f9;
+    --border: #e2e8f0;
+    --text: #475569;
+    --heading: #0f172a;
+    --accent-text: #0369a1;
+}
+html.dark {
+    color-scheme: dark;
+    --page-bg: #0f172a;
+    --surface: #1e293b;
+    --surface-soft: #253449;
+    --border: #334155;
+    --text: #cbd5e1;
+    --heading: #f8fafc;
+    --accent-text: #38bdf8;
+}
+html { scroll-padding-top: 6rem; }
+body { background: var(--page-bg); color: var(--text); }
+html.dark body { background-color: var(--page-bg) !important; color: var(--text) !important; }
+[hidden] { display: none !important; }
+button, a, [role="button"] { -webkit-tap-highlight-color: transparent; }
+button { touch-action: manipulation; }
+:focus-visible {
+    outline: 3px solid var(--accent-text);
+    outline-offset: 5px;
+}
+.skip-link {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 10000;
+    padding: .75rem 1rem;
+    background: var(--surface);
+    color: var(--heading);
+    border-radius: .75rem;
+    transform: translateY(-200%);
+}
+.skip-link:focus { transform: translateY(0); }
+#mainContent:focus { outline: none; }
+section, header { overflow-wrap: anywhere; }
+header.min-h-screen { min-height: 100svh; }
+html .text-brand, html .hover\:text-brand:hover { color: var(--accent-text); }
+a.bg-brand { background-color: #0369a1; }
+a.bg-brand:hover { background-color: #075985; }
+.group:hover .group-hover\:text-brand { color: var(--accent-text); }
+html.dark .bg-white { background-color: var(--surface) !important; }
+html.dark .bg-slate-50, html.dark .bg-slate-100 {
+    background-color: var(--surface-soft) !important;
+}
+html.dark .text-slate-900 { color: var(--heading) !important; }
+html.dark .text-slate-600, html.dark .text-slate-700 { color: var(--text) !important; }
+html.dark .text-slate-500 { color: #94a3b8 !important; }
+html.dark .border-slate-200 { border-color: var(--border) !important; }
+html.dark .border-white { border-color: var(--surface) !important; }
+html.dark .bg-slate-200 { background-color: #334155 !important; }
+html.dark .ring-background { --tw-ring-color: var(--page-bg); }
+html.dark .hover\:bg-slate-50:hover, html.dark .hover\:bg-slate-100:hover {
+    background-color: #334155 !important;
+}
+html.dark .hover\:text-slate-900:hover { color: var(--heading) !important; }
+html.dark .group:hover .group-hover\:text-brand { color: var(--accent-text) !important; }
+html.dark nav { background-color: rgba(15, 23, 42, .92) !important; }
+html.dark #projectModal { background-color: var(--page-bg) !important; }
+html.dark #projectModalClose { background-color: rgba(30, 41, 59, .95) !important; }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--surface-soft); }
+::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #64748b; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.hide-scrollbar::-webkit-scrollbar { display: none; }
 
-        /* 滾動淡入動畫基礎設定 */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* 延遲動畫 */
-        .delay-100 { transition-delay: 100ms; }
-        .delay-200 { transition-delay: 200ms; }
-        .delay-300 { transition-delay: 300ms; }
+/* JavaScript 或觀察器不可用時，內容仍保持可見。 */
+.reveal { opacity: 1; transform: none; }
+.js-reveal .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .65s ease, transform .65s ease;
+}
+.js-reveal .reveal.active { opacity: 1; transform: none; }
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.bg-grid {
+    background-size: 40px 40px;
+    background-image: linear-gradient(to right, rgba(15, 23, 42, .05) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(15, 23, 42, .05) 1px, transparent 1px);
+    mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+}
+html.dark .bg-grid {
+    background-image: linear-gradient(to right, rgba(148, 163, 184, .08) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(148, 163, 184, .08) 1px, transparent 1px);
+}
+.modal { opacity: 0; transition: opacity .2s ease; overscroll-behavior: contain; }
+.modal.is-open { opacity: 1; }
+.modal:not(.is-open) { pointer-events: none; }
+.project-modal-scroll { overscroll-behavior: contain; }
+.gallery-button { text-align: left; color: inherit; }
+.image-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 8rem;
+    padding: 1rem;
+    color: var(--text);
+    background: var(--surface-soft);
+    text-align: center;
+}
+#imageZoomModal { display: flex; }
+#zoomedImage { transform: scale(.97); transition: transform .2s ease; }
+#imageZoomModal.is-open #zoomedImage { transform: scale(1); }
 
-        /* 背景網格特效 - 明亮版 */
-        .bg-grid {
-            background-size: 40px 40px;
-            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-        }
+/* 偵測到實際滑鼠移動後，才隱藏原生游標。 */
+#cursor-dot, #cursor-ring {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    border-radius: 50%;
+    transform: translate3d(var(--cursor-x, 0px), var(--cursor-y, 0px), 0) translate(-50%, -50%);
+}
+#cursor-dot { width: 8px; height: 8px; background: #0ea5e9; z-index: 9999; }
+#cursor-ring {
+    width: 32px;
+    height: 32px;
+    border: 2px solid rgba(14, 165, 233, .5);
+    z-index: 9998;
+    transition: width .15s ease, height .15s ease, background-color .15s ease;
+}
+@media (min-width: 768px) and (any-hover: hover) and (any-pointer: fine) {
+    html.custom-cursor #cursor-dot, html.custom-cursor #cursor-ring { display: block; }
+    html.custom-cursor body, html.custom-cursor a, html.custom-cursor button,
+    html.custom-cursor [role="button"], html.custom-cursor .cursor-zoom-out,
+    html.custom-cursor .cursor-pointer, html.custom-cursor .cursor-zoom-in,
+    html.custom-cursor .cursor-text {
+        cursor: none !important;
+    }
+    html.cursor-interactive #cursor-ring {
+        width: 48px;
+        height: 48px;
+        background-color: rgba(14, 165, 233, .15);
+        border-color: transparent;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto !important; }
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        transition-delay: 0ms !important;
+    }
+    .js-reveal .reveal { opacity: 1; transform: none; }
+}
 
-        /* 隱藏橫向捲軸但保持可滑動 */
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .hide-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-/* 隱藏電腦版的預設游標 */
-        @media (min-width: 768px) {
-            body, a, button, .cursor-pointer, .cursor-zoom-in, .cursor-zoom-out, .cursor-text {
-                cursor: none !important;
-            }
-        }
-        
-        /* 游標平滑移動的動畫屬性 */
-        #cursor-ring {
-            transition: transform 0.15s ease-out, background-color 0.2s ease, width 0.2s ease, height 0.2s ease;
-        }
     </style>
 </head>
 <body class="bg-background text-slate-600 font-sans antialiased selection:bg-brand selection:text-white relative">
-    <div id="cursor-dot" class="fixed top-0 left-0 w-2 h-2 bg-brand rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 hidden md:block mix-blend-difference"></div>
-    <div id="cursor-ring" class="fixed top-0 left-0 w-8 h-8 border-2 border-brand/50 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 hidden md:block"></div>
+    <a href="#mainContent" class="skip-link" data-page-content>跳至主要內容</a>
+    <div id="cursor-dot" aria-hidden="true"></div>
+    <div id="cursor-ring" aria-hidden="true"></div>
 
-    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 transition-all duration-300" id="navbar">
-        <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="#" class="text-slate-900 text-xl font-bold tracking-wider flex items-center gap-2">
-                <i class="ph-fill ph-code text-brand text-2xl"></i>
+    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 transition-all duration-300" id="navbar" aria-label="主選單" data-page-content>
+        <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between gap-3">
+            <a href="#mainContent" class="text-slate-900 text-xl font-bold tracking-wider flex items-center gap-2" aria-label="Aquafire，回到頁首">
+                <i class="ph-fill ph-code text-brand text-2xl" aria-hidden="true"></i>
                 AQUAFIRE
             </a>
-            
-            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
-                <a href="#projects" class="hover:text-brand transition-colors">專案作品</a>
-                <a href="#experience" class="hover:text-brand transition-colors">經歷</a>
-                <a href="#about" class="hover:text-brand transition-colors">關於我</a>
-                <a href="#contact" class="px-5 py-2.5 bg-white hover:bg-slate-50 text-slate-900 rounded-full border border-slate-200 hover:border-brand transition-all shadow-sm">
-                    聯絡我
-                </a>
-                    <button id="themeToggleBtn" class="ml-4 w-12 h-12 md:w-16 md:h-16 flex items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors focus:outline-none" title="開燈 (寶寶醒著)">
-                    <img id="themeToggleImg" src="./images/light-switch.png" alt="切換作息" class="w-full h-full object-contain transition-transform duration-300 hover:scale-110">
-                </button>
+            <div class="flex items-center gap-3 md:gap-6">
+                <div class="hidden md:flex items-center gap-6 text-sm font-medium">
+                    <a href="#projects" class="hover:text-brand transition-colors">專案作品</a>
+                    <a href="#experience" class="hover:text-brand transition-colors">經歷</a>
+                    <a href="#about" class="hover:text-brand transition-colors">關於我</a>
+                    <a href="#contact" class="px-5 py-2.5 bg-white hover:bg-slate-50 text-slate-900 rounded-full border border-slate-200 hover:border-brand transition-all shadow-sm">聯絡我</a>
                 </div>
+                <button type="button" id="themeToggleBtn" class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors shrink-0" aria-label="切換為深色模式，寶寶睡覺" aria-pressed="false" title="開燈（寶寶醒著）">
+                    <img id="themeToggleImg" src="./images/light-switch.png" alt="" width="48" height="48" decoding="async" class="w-full h-full object-contain transition-transform duration-300 hover:scale-110">
+                    <span id="themeToggleFallback" class="text-2xl" aria-hidden="true" hidden>☀️</span>
+                </button>
+                <button type="button" id="mobileMenuBtn" class="md:hidden w-12 h-12 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-100 transition-colors shrink-0" aria-label="開啟選單" aria-controls="mobileMenu" aria-expanded="false">
+                    <svg data-menu-icon width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                        <path class="menu-lines" d="M4 6h16M4 12h16M4 18h16"/>
+                        <path class="menu-close" d="m6 6 12 12M6 18 18 6"/>
+                    </svg>
+                </button>
             </div>
-
-            <button id="mobileMenuBtn" class="md:hidden text-2xl text-slate-600 hover:text-slate-900 transition-colors">
-                <i class="ph ph-list"></i>
-            </button>
         </div>
-
-        <div id="mobileMenu" class="md:hidden hidden absolute top-20 left-0 w-full bg-white border-b border-slate-200 shadow-xl transition-all duration-300 origin-top">
+        <div id="mobileMenu" class="md:hidden absolute top-20 left-0 w-full bg-white border-b border-slate-200 shadow-xl" hidden>
             <div class="flex flex-col px-6 py-4 space-y-4 text-center text-slate-600 font-medium">
                 <a href="#projects" class="mobile-link hover:text-brand transition-colors py-2">專案作品</a>
                 <a href="#experience" class="mobile-link hover:text-brand transition-colors py-2">經歷</a>
@@ -164,7 +255,8 @@
         </div>
     </nav>
 
-    <header class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+    <main id="mainContent" tabindex="-1" data-page-content>
+    <header class="relative min-h-screen flex items-center justify-center pt-28 pb-16 md:pt-20 overflow-hidden">
         <div class="absolute inset-0 bg-grid z-0"></div>
         <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-brand/10 blur-[120px] rounded-full z-0 pointer-events-none"></div>
 
@@ -173,7 +265,7 @@
             <div class="relative mb-8 group">
                 <div class="absolute -inset-1 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full blur opacity-40 group-hover:opacity-70 transition duration-1000 group-hover:duration-200"></div>
                 <div class="relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white bg-slate-100 flex items-center justify-center shadow-lg">
-                    <img src="./images/aquafire.jpg" alt="游焰熾的個人照片" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <img width="160" height="160" fetchpriority="high" decoding="async" src="./images/aquafire.jpg" alt="游焰熾的個人照片" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 </div>
             </div>
 
@@ -183,23 +275,19 @@
             </div>
             
             <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-6 leading-normal">
-                Feel Now / Find Next <br class="md:hidden" leading-normal />
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600 leading-normal">           
-                    <br> 讓設計發生在感受與發現之間 </br>
-                </span>
+                Feel Now / Find Next
+                <span class="block mt-3 text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600 leading-normal">讓設計發生在感受與發現之間</span>
             </h1>
-            
-            <p class="text-lg md:text-xl text-slate-600 mb-2 max-w-2xl mx-auto leading-relaxed">
-                你好，我是 Aquafire 游焰熾 再忙也要創作，把生活融入設計中。</p>
-            <p class="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed"> 
-                </p>
-            
+            <p class="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                你好，我是 Aquafire 游焰熾。再忙也要創作，把生活融入設計中。
+            </p>
+
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a href="#projects" class="w-full sm:w-auto px-8 py-4 bg-slate-900 text-white font-bold rounded-full hover:bg-slate-800 transition-colors flex items-center justify-center gap-2 shadow-lg shadow-slate-900/20">
-                    查看作品 <i class="ph-bold ph-arrow-down-right"></i>
+                    查看作品 <i class="ph-bold ph-arrow-down-right" aria-hidden="true"></i>
                 </a>
-                <a href="https://github.com" target="_blank" class="w-full sm:w-auto px-8 py-4 bg-white text-slate-900 font-medium rounded-full hover:bg-slate-50 border border-slate-200 transition-colors flex items-center justify-center gap-2 shadow-sm">
-                    <i class="ph-fill ph-github-logo text-xl"></i> GitHub
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-8 py-4 bg-white text-slate-900 font-medium rounded-full hover:bg-slate-50 border border-slate-200 transition-colors flex items-center justify-center gap-2 shadow-sm">
+                    <i class="ph-fill ph-github-logo text-xl" aria-hidden="true"></i> GitHub
                 </a>
             </div>
         </div>
@@ -213,139 +301,139 @@
             </div>
 
             <div id="projectsContainer" class="columns-1 md:columns-2 lg:columns-3 gap-6">
-               <div onclick="openProjectModal('leonfont')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
+               <div data-project="leonfont" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="projectModal" aria-labelledby="projectTitle-leonfont" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
-                        <img src="./images/leonbaby/cover.jpg?auto=format&fit=crop&q=80&w=800" alt="Leonbaby 字型" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
+                        <img loading="lazy" decoding="async" src="./images/leonbaby/cover.jpg" alt="Leonbaby 字型" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
                     <div class="p-6 relative z-10 bg-white">
                         <div class="flex gap-2 mb-4">
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">Leonbaby</span>
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">字型設計</span>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">字型設計</h3>
+                        <h3 id="projectTitle-leonfont" class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">字型設計</h3>
                         <p class="text-slate-600 text-sm mb-4 line-clamp-4">2025兒子來到地球的第一年，我把你的可愛，作成了字體。以嬰兒「頭大、身體小」的比例為靈感，設計了一套英文字形，名字源自兒子的英文名 Leon，紀念我們一起長大的第一年。一份送給兒子的生日禮物，也想分享給世界。</p>
                         <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
-                            觀看內容 <i class="ph-bold ph-images"></i>
+                            觀看內容 <i class="ph-bold ph-images" aria-hidden="true"></i>
                         </span>
                     </div>
                 </div>
 
                
-                <div onclick="openProjectModal('boba')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
+                <div data-project="boba" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="projectModal" aria-labelledby="projectTitle-boba" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
-                        <img src="./images/boba/passport.jpg?auto=format&fit=crop&q=80&w=800" alt="珍珠奶茶護照" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
+                        <img loading="lazy" decoding="async" src="./images/boba/passport.jpg" alt="珍珠奶茶護照" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
                     <div class="p-6 relative z-10 bg-white">
                         <div class="flex gap-2 mb-4">
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">台灣特有種</span>
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">插畫設計</span>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">珍珠奶茶護照設計</h3>
-                        <p class="text-slate-600 text-sm mb-4 line-clamp-4">原本護照套上的 (Republic of China) 字樣，很容易讓我們在國外旅遊時被誤認為中國人，會發生一些不必要的誤會，所以我設計的護照上就拿掉了這行文字，只留下 Taiwan字樣。在想封面的時候，腦中有想過一些元素是可以拿來代表台灣的東西，例如原住民的圖騰、台灣的宗教信仰…等，但如果用了 these 元素，就會侷限了某種族或宗教而代表性不足。後來我想到珍珠奶茶這個台灣在地的平民美食，是外國朋友來都一定帶他們喝的飲料，都得到很好的回饋，民以食為天，吃的東西是最貼近生活文化，珍珠奶茶這個台灣代表性很高的飲料，拿來當作台灣護照封面，打破了種族、宗教、地區、甚至國界，又可以宣傳台灣。</p>
+                        <h3 id="projectTitle-boba" class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">珍珠奶茶護照設計</h3>
+                        <p class="text-slate-600 text-sm mb-4 line-clamp-4">原本護照套上的 (Republic of China) 字樣，很容易讓我們在國外旅遊時被誤認為中國人，會發生一些不必要的誤會，所以我設計的護照上就拿掉了這行文字，只留下 Taiwan字樣。在想封面的時候，腦中有想過一些元素是可以拿來代表台灣的東西，例如原住民的圖騰、台灣的宗教信仰…等，但如果用了這些元素，就會侷限了某種族或宗教而代表性不足。後來我想到珍珠奶茶這個台灣在地的平民美食，是外國朋友來都一定帶他們喝的飲料，都得到很好的回饋，民以食為天，吃的東西是最貼近生活文化，珍珠奶茶這個台灣代表性很高的飲料，拿來當作台灣護照封面，打破了種族、宗教、地區、甚至國界，又可以宣傳台灣。</p>
                         <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
-                            觀看內容 <i class="ph-bold ph-images"></i>
+                            觀看內容 <i class="ph-bold ph-images" aria-hidden="true"></i>
                         </span>
                     </div>
                 </div>
 
-                <div onclick="openProjectModal('fapa')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-100 cursor-pointer shadow-sm">
+                <div data-project="fapa" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="projectModal" aria-labelledby="projectTitle-fapa" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-100 cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
-                        <img src="./images/twflag/twf03.jpg?auto=format&fit=crop&q=80&w=800" alt="FAPA TAIWAN FLAG" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
+                        <img loading="lazy" decoding="async" src="./images/twflag/twf03.jpg" alt="FAPA TAIWAN FLAG" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
                     <div class="p-6 relative z-10 bg-white">
                         <div class="flex gap-2 mb-4">
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">CIS設計</span>
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">旗幟設計</span>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">2023 FAPA TAIWAN FLAG DESIGN</h3>
+                        <h3 id="projectTitle-fapa" class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">2023 FAPA TAIWAN FLAG DESIGN</h3>
                        <p class="text-slate-600 text-sm mb-4 line-clamp-4">榮獲第三名。以現代簡約風格與台灣核心意象重新解構、設計的旗幟視覺。從15世紀大航海時代開始，葡萄牙人遠渡重洋在太平洋上看見美麗的台灣而喊出Formosa，讓台灣漸漸在國際上嶄露頭角，藍色代表的是太平洋，綠色代表著台灣島嶼上百岳山脈與自然環境，而白色是由七種色光所疊合而成，象徵著台灣島上豐富的多元文化在此地共榮共存共好著。</p>
                         <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
-                            觀看內容 <i class="ph-bold ph-images"></i>
+                            觀看內容 <i class="ph-bold ph-images" aria-hidden="true"></i>
                         </span>
                     </div>
                 </div>
 
-                <div onclick="openProjectModal('market')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-200 cursor-pointer shadow-sm">
+                <div data-project="market" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="projectModal" aria-labelledby="projectTitle-market" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-200 cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
-                        <img src="./images/market/01.jpg?auto=format&fit=crop&q=80&w=800" alt="市集活動海報" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
+                        <img loading="lazy" decoding="async" src="./images/market/01.jpg" alt="市集活動海報" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
                     <div class="p-6 relative z-10 bg-white">
                         <div class="flex gap-2 mb-4">
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">品牌形象塑造</span>
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">視覺定位</span>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">市集海報設計規劃</h3>
+                        <h3 id="projectTitle-market" class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">市集海報設計規劃</h3>
                         <p class="text-slate-600 text-sm mb-4 line-clamp-4">為市集打造完整的品牌視覺包含Logo、標準字與應用物設計。</p>
                         <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
-                            觀看內容 <i class="ph-bold ph-images"></i>
+                            觀看內容 <i class="ph-bold ph-images" aria-hidden="true"></i>
                         </span>
                     </div>
                 </div>
 
-                <div onclick="openProjectModal('exhibition')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-200 cursor-pointer shadow-sm">
+                <div data-project="exhibition" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="projectModal" aria-labelledby="projectTitle-exhibition" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal delay-200 cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
-                        <img src="./images/V1/01.jpg?auto=format&fit=crop&q=80&w=800" alt="成果展活動海報" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
+                        <img loading="lazy" decoding="async" src="./images/V1/01.jpg" alt="成果展活動海報" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
                     <div class="p-6 relative z-10 bg-white">
                         <div class="flex gap-2 mb-4">
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">VIS概念</span>
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">系列活動海報</span>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">活動海報設計規劃</h3>
+                        <h3 id="projectTitle-exhibition" class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">活動海報設計規劃</h3>
                         <p class="text-slate-600 text-sm mb-4 line-clamp-4">為不同日期不同主題的社造成果展，打造同視覺海報，提升整體感。</p>
                         <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
-                            觀看內容 <i class="ph-bold ph-images"></i>
+                            觀看內容 <i class="ph-bold ph-images" aria-hidden="true"></i>
                         </span>
                     </div>
                 </div>
 
-                <div onclick="openProjectModal('logo')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
+                <div data-project="logo" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="projectModal" aria-labelledby="projectTitle-logo" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
-                        <img src="./images/logo/cover.jpg?auto=format&fit=crop&q=80&w=800" alt="Logo設計" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
+                        <img loading="lazy" decoding="async" src="./images/logo/cover.jpg" alt="Logo設計" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
                     <div class="p-6 relative z-10 bg-white">
                         <div class="flex gap-2 mb-4">
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">量身打造</span>
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">品牌識別</span>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">Logo設計</h3>
+                        <h3 id="projectTitle-logo" class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">Logo設計</h3>
                         <p class="text-slate-600 text-sm mb-4 line-clamp-4">品牌識別（Brand Identity）簡單來說，就是品牌在社會大眾面前所展現的「長相」與「個性」。如果把品牌比喻成一個人，他的名字、穿衣風格、說話語氣和行為舉止，就構成了他的個人特質；而品牌識別就是透過文字、色彩、標誌（Logo）和視覺系統，把企業的核心理念具體化，讓消費者一眼就能認出、並記住這個品牌。</p>
                         <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
-                            觀看內容 <i class="ph-bold ph-images"></i>
+                            觀看內容 <i class="ph-bold ph-images" aria-hidden="true"></i>
                         </span>
                     </div>
                 </div>
 
-                <div onclick="openProjectModal('race')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
+                <div data-project="race" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="projectModal" aria-labelledby="projectTitle-race" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
-                        <img src="./images/race/cover.jpg?auto=format&fit=crop&q=80&w=800" alt="活動視覺KV" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
+                        <img loading="lazy" decoding="async" src="./images/race/cover.jpg" alt="活動視覺KV" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
                     <div class="p-6 relative z-10 bg-white">
                         <div class="flex gap-2 mb-4">
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">活動視覺</span>
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">活動品牌識別</span>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">活動視覺設計</h3>
+                        <h3 id="projectTitle-race" class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">活動視覺設計</h3>
                         <p class="text-slate-600 text-sm mb-4 line-clamp-4">活動視覺設計（Key Visual, KV）是一場活動的靈魂，透過色彩、字體、圖像與排版，將核心精神轉化為受眾有感的視覺識別。它不僅是一張單一海報，更是一套能全面應用於實體與數位平台的視覺系統</p>
                         <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
-                            觀看內容 <i class="ph-bold ph-images"></i>
+                            觀看內容 <i class="ph-bold ph-images" aria-hidden="true"></i>
                         </span>
                     </div>
                 </div>
 
-                <div onclick="openProjectModal('brand')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
+                <div data-project="brand" role="button" tabindex="0" aria-haspopup="dialog" aria-controls="projectModal" aria-labelledby="projectTitle-brand" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
-                        <img src="./images/brand/cover.jpg?auto=format&fit=crop&q=80&w=800" alt="品牌形象" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
+                        <img loading="lazy" decoding="async" src="./images/brand/cover.jpg" alt="品牌形象" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
                     </div>
                     <div class="p-6 relative z-10 bg-white">
                         <div class="flex gap-2 mb-4">
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">品牌形象</span>
                             <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">品牌識別</span>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">企業視覺設計</h3>
+                        <h3 id="projectTitle-brand" class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">企業視覺設計</h3>
                         <p class="text-slate-600 text-sm mb-4 line-clamp-4">品牌形象設計是透過視覺、語言與商業策略的整合，賦予企業或產品獨特的人格與價值觀。它不僅僅是一個 Logo，更是與消費者溝通的橋樑，協助企業在市場中脫穎而出，建立長期的品牌信任感與辨識度。</p>
                         <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
-                            觀看內容 <i class="ph-bold ph-images"></i>
+                            觀看內容 <i class="ph-bold ph-images" aria-hidden="true"></i>
                         </span>
                     </div>
                 </div>
@@ -353,45 +441,6 @@
             </div>
         </div>
     </section>
-
-    <!-- 第二層：專案內容燈箱 (左右分欄現代瀑布流 + 完整不裁切封面 + 修正手機版被裁切) -->
-    <div id="projectModal" class="fixed inset-0 z-[100] bg-white hidden opacity-0 transition-opacity duration-300">
-        
-        <button onclick="closeProjectModal()" class="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md hover:bg-slate-100 text-slate-900 transition-colors shadow-md z-50 border border-slate-200">
-            <i class="ph ph-x text-xl md:text-2xl"></i>
-        </button>
-
-        <div class="w-full h-full flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
-            
-            <div class="w-full lg:w-[38%] bg-slate-50 p-6 md:p-10 pt-16 lg:pt-10 border-b lg:border-b-0 lg:border-r border-slate-200 lg:overflow-y-auto hide-scrollbar flex flex-col shrink-0 lg:h-full">
-                <h3 id="modalTitle" class="text-2xl md:text-3xl font-bold text-slate-900 mb-6 tracking-tight">專案標題</h3>
-                
-                <div class="rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 mb-6 flex items-center justify-center p-2 max-h-[40vh] md:max-h-[45vh] shrink-0">
-                    <img id="modalCoverImage" src="" alt="專案主封面" class="max-w-full max-h-[40vh] md:max-h-[45vh] object-contain mx-auto transition-all duration-300">
-                </div>
-                
-                <div class="prose prose-slate max-w-none pb-8 lg:pb-0">
-                    <p id="modalDesc" class="text-slate-600 text-sm md:text-base leading-relaxed whitespace-pre-line">專案描述文字...</p>
-                </div>
-            </div>
-
-            <div class="w-full lg:w-[62%] lg:h-full lg:overflow-y-auto p-6 md:p-10 hide-scrollbar bg-white">
-                <div id="modalVideoContainer" class="max-w-4xl mx-auto mb-8 hidden"></div>
-                <div id="modalImagesContainer" class="columns-1 md:columns-2 gap-6 max-w-4xl mx-auto pb-10">
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- 第三層：單圖全螢幕放大 (Zoom) -->
-    <div id="imageZoomModal" class="fixed inset-0 z-[110] bg-slate-900/95 backdrop-blur-md hidden flex-col opacity-0 transition-opacity duration-300 items-center justify-center p-4 cursor-zoom-out" onclick="closeImageZoom()">
-        <button class="absolute top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer z-10">
-            <i class="ph ph-x text-2xl"></i>
-        </button>
-        <img id="zoomedImage" src="" class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl transition-transform duration-300 scale-95" onclick="event.stopPropagation()">
-        <p id="zoomedCaption" class="text-white mt-6 text-center text-sm md:text-base max-w-2xl font-medium px-4"></p>
-    </div>
 
     <section id="experience" class="py-24 relative z-10">
         <div class="max-w-4xl mx-auto px-6">
@@ -495,23 +544,13 @@
             <div class="grid md:grid-cols-2 gap-16 items-center">
                 <div class="reveal">
                     <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6">關於我</h2>
-                   <p class="text-slate-600 mb-6 leading-relaxed">
+                    <ul class="text-slate-600 mb-6 leading-relaxed list-disc list-inside space-y-3">
                         <li>1984.02.03 水瓶座</li>
-                        </p> 
-                   <p class="text-slate-600 mb-6 leading-relaxed">
                         <li>1999-2002 國立花蓮高工 資訊科</li>
-                        </p>
-                    <p class="text-slate-600 mb-6 leading-relaxed">
-                        <li>2002-2008 樹德科技大學 電腦與通訊系 視覺傳達設計系 雙主修 </li>
-                    </p>
-                     <p class="text-slate-600 mb-6 leading-relaxed">
-                        <li>2020 珍珠奶茶護照設計 </li>
-                    </p>
-                     <p class="text-slate-600 mb-6 leading-relaxed">
-                        <li>2023 FAPA TAIWAN FLAG DESIGN 第三名 </li>
-                    </p>
-                    <p class="text-slate-600 mb-6 leading-relaxed">
-                    </p>
+                        <li>2002-2008 樹德科技大學 電腦與通訊系 視覺傳達設計系 雙主修</li>
+                        <li>2020 珍珠奶茶護照設計</li>
+                        <li>2023 FAPA TAIWAN FLAG DESIGN 第三名</li>
+                    </ul>
                     <p class="text-slate-600 mb-6 leading-relaxed">
                         擁有超過 10年平面設計經驗，熟悉現代化的數位工具。
                     </p>
@@ -520,12 +559,12 @@
                     </p>
                     <div class="grid grid-cols-2 gap-4 mt-8">
                         <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                            <i class="ph ph-layout text-3xl text-brand mb-2"></i>
+                            <i class="ph ph-layout text-3xl text-brand mb-2" aria-hidden="true"></i>
                             <h3 class="text-slate-900 font-semibold">視覺設計</h3>
                             <p class="text-sm text-slate-500 mt-1">Graphic design,VIS,</p>
                         </div>
                         <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                            <i class="ph ph-paint-brush-broad text-3xl text-brand mb-2"></i>
+                            <i class="ph ph-paint-brush-broad text-3xl text-brand mb-2" aria-hidden="true"></i>
                             <h3 class="text-slate-900 font-semibold">品牌企劃</h3>
                             <p class="text-sm text-slate-500 mt-1">Brand Planner</p>
                         </div>
@@ -631,462 +670,617 @@
             
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a href="mailto:fire198470@gmail.com" class="inline-flex items-center gap-2 px-8 py-4 bg-brand text-white font-bold rounded-full hover:bg-blue-500 transition-all shadow-lg shadow-brand/30 hover:shadow-brand/50 hover:-translate-y-1 w-full sm:w-auto justify-center">
-                    <i class="ph-fill ph-envelope-simple text-xl"></i> fire198470@gmail.com
+                    <i class="ph-fill ph-envelope-simple text-xl" aria-hidden="true"></i> fire198470@gmail.com
                 </a>
                 
-                <a href="https://www.facebook.com/fnfndesign" target="_blank" class="inline-flex items-center gap-2 px-8 py-4 bg-[#1877F2] text-white font-bold rounded-full hover:bg-[#166fe5] transition-all shadow-lg shadow-[#1877F2]/30 hover:shadow-[#1877F2]/50 hover:-translate-y-1 w-full sm:w-auto justify-center">
-                    <i class="ph-fill ph-facebook-logo text-xl"></i> Facebook 粉絲專頁
+                <a href="https://www.facebook.com/fnfndesign" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-8 py-4 bg-[#1877F2] text-white font-bold rounded-full hover:bg-[#166fe5] transition-all shadow-lg shadow-[#1877F2]/30 hover:shadow-[#1877F2]/50 hover:-translate-y-1 w-full sm:w-auto justify-center">
+                    <i class="ph-fill ph-facebook-logo text-xl" aria-hidden="true"></i> Facebook 粉絲專頁
                 </a>
             </div>
             
             <div class="mt-8 inline-flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-full text-slate-700 font-medium shadow-sm hover:shadow-md transition-shadow">
-                <i class="ph-fill ph-chat-circle-text text-[#00c300] text-2xl"></i> 
+                <i class="ph-fill ph-chat-circle-text text-[#00c300] text-2xl" aria-hidden="true"></i> 
                 Line ID：<span class="select-all font-bold text-slate-900 cursor-text">fire1984</span>
             </div>
         </div>
     </section>
 
-    <footer class="py-8 border-t border-slate-200 bg-white text-center relative z-10">
+    </main>
+
+    <!-- 第二層：專案內容燈箱 (左右分欄現代瀑布流 + 完整不裁切封面 + 修正手機版被裁切) -->
+    <div id="projectModal" class="modal fixed inset-0 z-[100] bg-white" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc" aria-hidden="true" tabindex="-1" hidden>
+        
+        <button type="button" id="projectModalClose" aria-label="關閉專案" class="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-white/90 backdrop-blur-md hover:bg-slate-100 text-slate-900 transition-colors shadow-md z-50 border border-slate-200">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg>
+        </button>
+
+        <div class="project-modal-scroll w-full h-full flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
+            
+            <div class="project-modal-scroll w-full lg:w-[38%] bg-slate-50 p-6 md:p-10 pt-16 lg:pt-10 border-b lg:border-b-0 lg:border-r border-slate-200 lg:overflow-y-auto hide-scrollbar flex flex-col shrink-0 lg:h-full">
+                <h2 id="modalTitle" class="text-2xl md:text-3xl font-bold text-slate-900 mb-6 tracking-tight">專案標題</h2>
+                
+                <div class="rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 mb-6 flex items-center justify-center p-2 max-h-[40vh] md:max-h-[45vh] shrink-0">
+                    <img id="modalCoverImage" decoding="async" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="專案主封面" class="max-w-full max-h-[40vh] md:max-h-[45vh] object-contain mx-auto transition-all duration-300">
+                </div>
+                
+                <div class="max-w-none pb-8 lg:pb-0">
+                    <p id="modalDesc" class="text-slate-600 text-sm md:text-base leading-relaxed whitespace-pre-line">專案描述文字...</p>
+                    <div id="modalDownloadContainer" class="mt-6" hidden>
+                        <a id="modalDownloadLink" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand text-white font-semibold rounded-full transition-colors w-full sm:w-auto">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M5 16v4h14v-4"/></svg>
+                            <span id="modalDownloadLabel"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-modal-scroll w-full lg:w-[62%] lg:h-full lg:overflow-y-auto p-6 md:p-10 hide-scrollbar bg-white">
+                <div id="modalVideoContainer" class="max-w-4xl mx-auto mb-8" hidden></div>
+                <div id="modalImagesContainer" class="columns-1 md:columns-2 gap-6 max-w-4xl mx-auto pb-10">
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 第三層：單圖全螢幕放大 (Zoom) -->
+    <div id="imageZoomModal" class="modal fixed inset-0 z-[110] bg-slate-900/95 backdrop-blur-md flex-col items-center justify-center p-4 cursor-zoom-out" role="dialog" aria-modal="true" aria-label="作品圖片放大" aria-describedby="zoomedCaption" aria-hidden="true" tabindex="-1" hidden>
+        <button type="button" id="imageZoomClose" aria-label="關閉圖片放大" class="absolute top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer z-10">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"/></svg>
+        </button>
+        <img id="zoomedImage" alt="作品放大圖片" decoding="async" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl">
+        <p id="zoomedCaption" class="text-white mt-6 text-center text-sm md:text-base max-w-2xl font-medium px-4"></p>
+    </div>
+
+    <footer data-page-content class="py-8 border-t border-slate-200 bg-white text-center relative z-10">
         <p class="text-slate-500 text-sm">
             &copy; 2026 Aquafire 游焰熾. All rights reserved. <br class="sm:hidden" />Designed & Built with gemini.
         </p>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-// 👇 新增：圖片開關 (深色模式) 切換邏輯 👇
-            const themeToggleBtn = document.getElementById('themeToggleBtn');
-            const themeToggleImg = document.getElementById('themeToggleImg');
-            const htmlElement = document.documentElement;
-
-            // 🌟 在這裡設定您的圖片路徑 🌟
-            const imgLight = './images/light-switch.png'; // 開燈狀態的圖片 (寶寶醒著)
-            const imgDark = './images/dark-switch.png';   // 關燈狀態的圖片 (寶寶睡覺)
-
-            // 關燈狀態 (寶寶睡覺)
-            const setDarkMode = () => {
-                htmlElement.classList.add('dark');
-                themeToggleImg.src = imgDark; // 換成關燈圖片
-                themeToggleBtn.title = "關燈 (寶寶睡覺中)";
-            };
-
-            // 開燈狀態 (寶寶醒著)
-            const setLightMode = () => {
-                htmlElement.classList.remove('dark');
-                themeToggleImg.src = imgLight; // 換成開燈圖片
-                themeToggleBtn.title = "開燈 (寶寶醒著)";
-            };
-
-            // 檢查之前的設定
-            if (localStorage.theme === 'dark') {
-                setDarkMode();
-            } else {
-                setLightMode(); // 確保初始載入時圖片正確
-            }
-
-            // 監聽圖片按鈕點擊事件
-            if (themeToggleBtn) {
-                themeToggleBtn.addEventListener('click', () => {
-                    // 加上一點點擊縮放的 Q 彈動畫效果
-                    themeToggleImg.style.transform = 'scale(0.8)';
-                    setTimeout(() => themeToggleImg.style.transform = 'scale(1)', 150);
-
-                    if (htmlElement.classList.contains('dark')) {
-                        setLightMode();
-                        localStorage.theme = 'light';
-                    } else {
-                        setDarkMode();
-                        localStorage.theme = 'dark';
-                    }
-                });
-            }
-            // 👆 新增結束 👆
-// 👇 新增：自訂滑鼠游標邏輯 👇
-            const cursorDot = document.getElementById('cursor-dot');
-            const cursorRing = document.getElementById('cursor-ring');
-            
-            // 只有在電腦版才執行游標邏輯 (避免干擾手機操作)
-            if (window.innerWidth >= 768) {
-                // 1. 讓游標跟著滑鼠移動
-                window.addEventListener('mousemove', (e) => {
-                    requestAnimationFrame(() => {
-                        cursorDot.style.left = `${e.clientX}px`;
-                        cursorDot.style.top = `${e.clientY}px`;
-                        cursorRing.style.left = `${e.clientX}px`;
-                        cursorRing.style.top = `${e.clientY}px`;
-                    });
-                });
-
-                // 2. 偵測畫面上所有可點擊的元素
-                const addCursorHoverEffect = () => {
-                    const clickables = document.querySelectorAll('a, button, .cursor-pointer, .cursor-zoom-in, .cursor-zoom-out');
-                    clickables.forEach(el => {
-                        // 確保不會重複綁定
-                        if (!el.dataset.cursorBound) {
-                            el.dataset.cursorBound = "true";
-                            el.addEventListener('mouseenter', () => {
-                                // 移入時：光環放大並填滿微透明品牌色
-                                cursorRing.style.transform = 'translate(-50%, -50%) scale(1.5)';
-                                cursorRing.style.backgroundColor = 'rgba(14, 165, 233, 0.15)';
-                                cursorRing.style.borderColor = 'rgba(14, 165, 233, 0)';
-                            });
-                            el.addEventListener('mouseleave', () => {
-                                // 移出時：恢復原狀
-                                cursorRing.style.transform = 'translate(-50%, -50%) scale(1)';
-                                cursorRing.style.backgroundColor = 'transparent';
-                                cursorRing.style.borderColor = 'rgba(14, 165, 233, 0.5)';
-                            });
-                        }
-                    });
-                };
-
-                // 初始化綁定
-                addCursorHoverEffect();
-                
-                // 每當打開燈箱動態產生新圖片時，重新綁定新元素的游標特效
-                const observer = new MutationObserver(addCursorHoverEffect);
-                observer.observe(document.body, { childList: true, subtree: true });
-            }
-            // 👆 新增結束 👆
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const mobileLinks = document.querySelectorAll('.mobile-link');
-
-            if (mobileMenuBtn && mobileMenu) {
-                mobileMenuBtn.addEventListener('click', () => {
-                    mobileMenu.classList.toggle('hidden');
-                    const icon = mobileMenuBtn.querySelector('i');
-                    if (mobileMenu.classList.contains('hidden')) {
-                        icon.classList.remove('ph-x');
-                        icon.classList.add('ph-list');
-                    } else {
-                        icon.classList.remove('ph-list');
-                        icon.classList.add('ph-x');
-                    }
-                });
-                mobileLinks.forEach(link => {
-                    link.addEventListener('click', () => {
-                        mobileMenu.classList.add('hidden');
-                        const icon = mobileMenuBtn.querySelector('i');
-                        icon.classList.remove('ph-x');
-                        icon.classList.add('ph-list');
-                    });
-                });
-            }
-
-            const navbar = document.getElementById('navbar');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('shadow-sm');
-                    navbar.classList.replace('bg-white/80', 'bg-white/95');
-                } else {
-                    navbar.classList.remove('shadow-sm');
-                    navbar.classList.replace('bg-white/95', 'bg-white/80');
-                }
-            });
-
-            const revealOptions = {
-                threshold: 0.15,
-                rootMargin: "0px 0px -50px 0px"
-            };
-            const revealObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, revealOptions);
-            const revealElements = document.querySelectorAll('.reveal');
-            revealElements.forEach(el => revealObserver.observe(el));
-        });
-
-        // ==========================================
-        // 專案燈箱 (第二層內容) 資料與邏輯
-        // ==========================================
-        const portfolioData = {
+(() => {
+    'use strict';
+    const portfolioData = {
                   'leonfont': {
                 title: 'Leonbaby字型',
-                cover: './images/leonbaby/cover.jpg?auto=format&fit=crop&q=80&w=1600',
-                description: '2025兒子來到地球的第一年，我把你的可愛，作成了字體。以嬰兒「頭大、身體小」的比例為靈感，設計了一套英文字形，名字源自兒子的英文名 Leon，紀念我們一起長大的第一年。一份送給兒子的生日禮物，也想分享給世界。',
+                downloadUrl: 'https://reurl.cc/beaM7o',
+                downloadLabel: '下載 Leonbaby 字型',
+                cover: './images/leonbaby/cover.jpg',
+                description: '2025兒子來到地球的第一年，我把嬰兒的可愛，作成了字體。以嬰兒「頭大、身體小」的比例為靈感，設計了一套英文字形，名字源自兒子的英文名 Leon，紀念我們一起長大的第一年。一份送給兒子的生日禮物，也想分享給世界。',
                 
                 images: [
-                    { src:'./images/leonbaby/font-1.jpg?auto=format&fit=crop&q=80&w=1600', caption: '字型應用範例' },
-                    { src:'./images/leonbaby/font-2.jpg?auto=format&fit=crop&q=80&w=1600', caption: '字型應用範例' },
-                    { src:'./images/leonbaby/font-3.jpg?auto=format&fit=crop&q=80&w=1600', caption: '字型應用範例' },
-                    { src:'./images/leonbaby/font-4.jpg?auto=format&fit=crop&q=80&w=1600', caption: '字型應用範例' }
+                    { src:'./images/leonbaby/font-1.jpg', caption: '字型應用範例' },
+                    { src:'./images/leonbaby/font-2.jpg', caption: '字型應用範例' },
+                    { src:'./images/leonbaby/font-3.jpg', caption: '字型應用範例' },
+                    { src:'./images/leonbaby/font-4.jpg', caption: '字型應用範例' }
                 ]
             },           
  
            'boba': {
                 title: '珍珠奶茶護照設計',
-                cover: './images/boba/passport.jpg?auto=format&fit=crop&q=80&w=1600',
+                cover: './images/boba/passport.jpg',
                 description: '原本護照套上的 (Republic of China) 字樣，很容易讓我們在國外旅遊時被誤認為中國人，會發生一些不必要的誤會，所以我設計的護照上就拿掉了這行文字，只留下 Taiwan字樣。在想封面的時候，腦中有想過一些元素是可以拿來代表台灣的東西，例如原住民的圖騰、台灣的宗教信仰…等，但如果用了這些元素，就會侷限了某種族或宗教而代表性不足。後來我想到珍珠奶茶這個台灣在地的平民美食，是外國朋友來都一定帶他們喝的飲料，都得到很好的回饋，民以食為天，吃的東西是最貼近生活文化，珍珠奶茶這個台灣代表性很高的飲料，拿來當作台灣護照封面，打破了種族、宗教、地區、甚至國界，又可以宣傳台灣。\n\nThe original \'Republic of China\' text on the passport cover often leads to us being mistaken for Chinese citizens when traveling abroad, which can cause unnecessary misunderstandings.\nTherefore, in my passport design, I removed that line entirely and only kept the word \'Taiwan.\'\n\nWhen brainstorming the cover design, I considered various elements that could represent Taiwan, such as Indigenous totems or Taiwanese religious beliefs.\nHowever, I felt that using those elements might be too narrow, limiting the representation to a specific ethnic group or religion.\n\nThen, I thought of bubble tea, a beloved, everyday treat here in Taiwan.\nIt’s the one drink we always make sure our foreign friends try when they visit, and it always receives great feedback.\nAs the saying goes, \'food is the paramount necessity of the people\';\nwhat we eat and drink is the most authentic reflection of our daily culture.\nUsing a highly representative drink like bubble tea for the Taiwan passport cover breaks down barriers of race, religion, region, and even national borders, all while serving as a fantastic way to promote Taiwan.',
                 images: [
-                    { src:'./images/boba/passport.jpg?auto=format&fit=crop&q=80&w=1600', caption: '護照封面設計，採用溫暖的奶茶色系與質感紋理' },
-                    { src:'./images/boba/passport2.jpg?auto=format&fit=crop&q=80&w=1600', caption: '國內媒體報導' },
-                    { src:'./images/boba/passport3.jpg?auto=format&fit=crop&q=80&w=1600', caption: '外媒報導' },
-                    { src:'./images/boba/passport4.jpg?auto=format&fit=crop&q=80&w=1600', caption: 'AI生成照片' }
+                    { src:'./images/boba/passport.jpg', caption: '護照封面設計，採用溫暖的奶茶色系與質感紋理' },
+                    { src:'./images/boba/passport2.jpg', caption: '國內媒體報導' },
+                    { src:'./images/boba/passport3.jpg', caption: '外媒報導' },
+                    { src:'./images/boba/passport4.jpg', caption: 'AI生成照片' }
                 ]
             },
             'fapa': {
                 title: '2023 FAPA TAIWAN FLAG DESIGN',
-                cover: './images/twflag/twf03.jpg?auto=format&fit=crop&q=80&w=1600',
+                cover: './images/twflag/twf03.jpg',
                 description: '榮獲第三名。以現代簡約風格與台灣核心意象重新解構、設計的旗幟視覺。從15世紀大航海時代開始，葡萄牙人遠渡重洋在太平洋上看見美麗的台灣而喊出Formosa，讓台灣漸漸在國際上嶄露頭角，藍色代表的是太平洋，綠色代表著台灣島嶼上百岳山脈與自然環境，而白色是由七種色光所疊合而成，象徵著台灣島上豐富的多元文化在此地共榮共存共好著。\n\nTaiwan is a beautiful island country.\nSince the 15th century, during the Age of Discovery, Portuguese sailors sailed across the Pacific and caught sight of the beautiful Taiwan, calling it "Formosa," which put Taiwan on the map.\nThe blue color in the flag represents the Pacific, while the green represents the island\'s central mountain range and natural environment.\nThe white is formed by the overlapping of seven colored rays, symbolizing the diverse cultures thriving and coexisting on Taiwan\'s rich land.',
                 youtube: 'yubsu5EWoxA',
                 images: [
-                    { src:'./images/twflag/twf01.jpg?auto=format&fit=crop&q=80&w=1600', caption: '面向世界美麗的太平洋給我的靈感' },
-                    { src:'./images/twflag/twf02.jpg?auto=format&fit=crop&q=80&w=1600', caption: '設計理念 / 台灣是一個美麗的島國' }, 
-                    { src:'./images/twflag/twf04.jpg?auto=format&fit=crop&q=80&w=1600', caption: '國旗別針 AI生成' }
+                    { src:'./images/twflag/twf01.jpg', caption: '面向世界美麗的太平洋給我的靈感' },
+                    { src:'./images/twflag/twf02.jpg', caption: '設計理念 / 台灣是一個美麗的島國' }, 
+                    { src:'./images/twflag/twf04.jpg', caption: '國旗別針 AI生成' }
                 ]
             },
             'market': {
                 title: '蝸牛遊市集活動海報',
-                cover: './images/market/01.jpg?auto=format&fit=crop&q=80&w=1600',
+                cover: './images/market/01.jpg',
                 description: '為市集打造完整的品牌視覺包含Logo、標準字與應用物設計。每期不同系列設計。',
                 images: [
-                    { src:'./images/market/01.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },
-                    { src:'./images/market/02.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },
-                    { src:'./images/market/03.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },
-                    { src:'./images/market/04.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },
-                    { src:'./images/market/05.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },
-                    { src:'./images/market/06.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },
-                    { src:'./images/market/07.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },
-                    { src:'./images/market/08.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },
-                    { src:'./images/market/09.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },
-                    { src:'./images/market/10.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },
-                    { src:'./images/market/11.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' },
-                    { src:'./images/market/12.jpg?auto=format&fit=crop&q=80&w=1600', caption: '蝸牛遊市集活動系列海報' }                    
+                    { src:'./images/market/01.jpg', caption: '蝸牛遊市集活動系列海報' },
+                    { src:'./images/market/02.jpg', caption: '蝸牛遊市集活動系列海報' },
+                    { src:'./images/market/03.jpg', caption: '蝸牛遊市集活動系列海報' },
+                    { src:'./images/market/04.jpg', caption: '蝸牛遊市集活動系列海報' },
+                    { src:'./images/market/05.jpg', caption: '蝸牛遊市集活動系列海報' },
+                    { src:'./images/market/06.jpg', caption: '蝸牛遊市集活動系列海報' },
+                    { src:'./images/market/07.jpg', caption: '蝸牛遊市集活動系列海報' },
+                    { src:'./images/market/08.jpg', caption: '蝸牛遊市集活動系列海報' },
+                    { src:'./images/market/09.jpg', caption: '蝸牛遊市集活動系列海報' },
+                    { src:'./images/market/10.jpg', caption: '蝸牛遊市集活動系列海報' },
+                    { src:'./images/market/11.jpg', caption: '蝸牛遊市集活動系列海報' },
+                    { src:'./images/market/12.jpg', caption: '蝸牛遊市集活動系列海報' }                    
                 ]
             }, 
             'exhibition': {
                 title: '社造成果展系列活動海報',
-                cover: './images/V1/01.jpg?auto=format&fit=crop&q=80&w=1600',
+                cover: './images/V1/01.jpg',
                 description: '為不同日期不同主題的社造成果展，打造同視覺海報，提升整體感。不同主題，不同日期相同視覺。',
                 images: [
-                    { src:'./images/V1/01.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' },
-                    { src:'./images/V1/02.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' },
-                    { src:'./images/V1/03.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' },
-                    { src:'./images/V1/04.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' },
-                    { src:'./images/V1/05.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' },
-                    { src:'./images/V1/06.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' },
-                    { src:'./images/V1/07.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' },
-                    { src:'./images/V1/08.jpg?auto=format&fit=crop&q=80&w=1600', caption: '社造成果展系列活動海報' }         
+                    { src:'./images/V1/01.jpg', caption: '社造成果展系列活動海報' },
+                    { src:'./images/V1/02.jpg', caption: '社造成果展系列活動海報' },
+                    { src:'./images/V1/03.jpg', caption: '社造成果展系列活動海報' },
+                    { src:'./images/V1/04.jpg', caption: '社造成果展系列活動海報' },
+                    { src:'./images/V1/05.jpg', caption: '社造成果展系列活動海報' },
+                    { src:'./images/V1/06.jpg', caption: '社造成果展系列活動海報' },
+                    { src:'./images/V1/07.jpg', caption: '社造成果展系列活動海報' },
+                    { src:'./images/V1/08.jpg', caption: '社造成果展系列活動海報' }         
                 ]
             },
             'logo': {
                 title: 'Logo設計',
-                cover: './images/logo/cover.jpg?auto=format&fit=crop&q=80&w=1600',
+                cover: './images/logo/cover.jpg',
                 description: '品牌識別（Brand Identity）簡單來說，就是品牌在社會大眾面前所展現的「長相」與「個性」。\n\n如果把品牌比喻成一個人，他的名字、穿衣風格、說話語氣和行為舉止，就構成了他的個人特質；而品牌識別就是透過文字、色彩、標誌（Logo）和視覺系統，把企業的核心理念具體化，讓消費者一眼就能認出、並記住這個品牌。',
                 images: [
-                    { src:'./images/logo/logo01.jpg?auto=format&fit=crop&q=80&w=1600', caption: '黎悠香草 Logo設計' },
-                    { src:'./images/logo/logo02.jpg?auto=format&fit=crop&q=80&w=1600', caption: '黎悠香草 識別應用' },
-                    { src:'./images/logo/logo03.jpg?auto=format&fit=crop&q=80&w=1600', caption: '鳳林蝸牛賽跑 Logo設計' },
-                    { src:'./images/logo/logo04.jpg?auto=format&fit=crop&q=80&w=1600', caption: '鳳林蝸牛賽跑大會旗' },
-                    { src:'./images/logo/logo05.jpg?auto=format&fit=crop&q=80&w=1600', caption: '鳳凰大樂隊 Logo設計' },
-                    { src:'./images/logo/logo06.jpg?auto=format&fit=crop&q=80&w=1600', caption: '鳳凰大樂隊 鑰匙圈' },
-                    { src:'./images/logo/logo07.jpg?auto=format&fit=crop&q=80&w=1600', caption: '鳳凰大樂隊 T-shirt' },
-                    { src:'./images/logo/logo08.jpg?auto=format&fit=crop&q=80&w=1600', caption: '好客專門Logo設計' },
-                    { src:'./images/logo/logo09.jpg?auto=format&fit=crop&q=80&w=1600', caption: '好客專門印刷物' },
-                    { src:'./images/logo/logo10.jpg?auto=format&fit=crop&q=80&w=1600', caption: 'FNFN Logo設計' },
-                    { src:'./images/logo/logo11.jpg?auto=format&fit=crop&q=80&w=1600', caption: 'FNFN 識別應用' },
-                    { src:'./images/logo/logo12.jpg?auto=format&fit=crop&q=80&w=1600', caption: '拾豆屋 Logo設計' },
-                    { src:'./images/logo/logo13.jpg?auto=format&fit=crop&q=80&w=1600', caption: '拾豆屋 產品應用' },
-                    { src:'./images/logo/logo14.jpg?auto=format&fit=crop&q=80&w=1600', caption: '鳳林生活田 Logo設計' },
-                    { src:'./images/logo/logo15.jpg?auto=format&fit=crop&q=80&w=1600', caption: '鳳林生活田 印刷物' }, 
-                    { src:'./images/logo/logo16.jpg?auto=format&fit=crop&q=80&w=1600', caption: '泥藝工坊Logo設計' }, 
-                    { src:'./images/logo/logo17.jpg?auto=format&fit=crop&q=80&w=1600', caption: '泥藝工坊 產品視覺應用' }, 
-                    { src:'./images/logo/logo18.jpg?auto=format&fit=crop&q=80&w=1600', caption: '實驗室 Logo設計' }, 
-                    { src:'./images/logo/logo19.jpg?auto=format&fit=crop&q=80&w=1600', caption: '實驗室 Logo視覺應用' }, 
-                    { src:'./images/logo/logo20.jpg?auto=format&fit=crop&q=80&w=1600', caption: '馬里勿 Logo設計' }, 
-                    { src:'./images/logo/logo21.jpg?auto=format&fit=crop&q=80&w=1600', caption: '馬里勿 產品包裝應用' }         
+                    { src:'./images/logo/logo01.jpg', caption: '黎悠香草 Logo設計' },
+                    { src:'./images/logo/logo02.jpg', caption: '黎悠香草 識別應用' },
+                    { src:'./images/logo/logo03.jpg', caption: '鳳林蝸牛賽跑 Logo設計' },
+                    { src:'./images/logo/logo04.jpg', caption: '鳳林蝸牛賽跑大會旗' },
+                    { src:'./images/logo/logo05.jpg', caption: '鳳凰大樂隊 Logo設計' },
+                    { src:'./images/logo/logo06.jpg', caption: '鳳凰大樂隊 鑰匙圈' },
+                    { src:'./images/logo/logo07.jpg', caption: '鳳凰大樂隊 T-shirt' },
+                    { src:'./images/logo/logo08.jpg', caption: '好客專門Logo設計' },
+                    { src:'./images/logo/logo09.jpg', caption: '好客專門印刷物' },
+                    { src:'./images/logo/logo10.jpg', caption: 'FNFN Logo設計' },
+                    { src:'./images/logo/logo11.jpg', caption: 'FNFN 識別應用' },
+                    { src:'./images/logo/logo12.jpg', caption: '拾豆屋 Logo設計' },
+                    { src:'./images/logo/logo13.jpg', caption: '拾豆屋 產品應用' },
+                    { src:'./images/logo/logo14.jpg', caption: '鳳林生活田 Logo設計' },
+                    { src:'./images/logo/logo15.jpg', caption: '鳳林生活田 印刷物' }, 
+                    { src:'./images/logo/logo16.jpg', caption: '泥藝工坊Logo設計' }, 
+                    { src:'./images/logo/logo17.jpg', caption: '泥藝工坊 產品視覺應用' }, 
+                    { src:'./images/logo/logo18.jpg', caption: '實驗室 Logo設計' }, 
+                    { src:'./images/logo/logo19.jpg', caption: '實驗室 Logo視覺應用' }, 
+                    { src:'./images/logo/logo20.jpg', caption: '馬里勿 Logo設計' }, 
+                    { src:'./images/logo/logo21.jpg', caption: '馬里勿 產品包裝應用' }         
                 ]
             },
             'race': {
                 title: '活動視覺設計KV',
-                cover: './images/race/cover.jpg?auto=format&fit=crop&q=80&w=1600',
+                cover: './images/race/cover.jpg',
                 description: '活動視覺設計（Key Visual, KV）是一場活動的靈魂，透過色彩、字體、圖像與排版，將核心精神轉化為受眾有感的視覺識別。它不僅是一張單一海報，更是一套能全面應用於實體與數位平台的視覺系統。',
                 youtube: 'WzWVIr0_yK4',                
                 images: [
-                    { src:'./images/race/01.jpg?auto=format&fit=crop&q=80&w=1600', caption: '大會活動主視覺海報' },
-                    { src:'./images/race/02.jpg?auto=format&fit=crop&q=80&w=1600', caption: '官方活動粉絲頁' },
-                    { src:'./images/race/03.jpg?auto=format&fit=crop&q=80&w=1600', caption: '工作人員識別證' },
-                    { src:'./images/race/04.jpg?auto=format&fit=crop&q=80&w=1600', caption: '紀念品小燈箱' },
-                    { src:'./images/race/05.jpg?auto=format&fit=crop&q=80&w=1600', caption: '舞台背板設計' },
-                    { src:'./images/race/06.jpg?auto=format&fit=crop&q=80&w=1600', caption: '活動紀念品' },
-                    { src:'./images/race/07.jpg?auto=format&fit=crop&q=80&w=1600', caption: '獎牌設計' },
-                    { src:'./images/race/08.jpg?auto=format&fit=crop&q=80&w=1600', caption: '破記錄獎狀' },
-                    { src:'./images/race/09.jpg?auto=format&fit=crop&q=80&w=1600', caption: '參賽證書' },
-                    { src:'./images/race/10.jpg?auto=format&fit=crop&q=80&w=1600', caption: '活動流程' },
-                    { src:'./images/race/11.jpg?auto=format&fit=crop&q=80&w=1600', caption: '活動報名處' }    
+                    { src:'./images/race/01.jpg', caption: '大會活動主視覺海報' },
+                    { src:'./images/race/02.jpg', caption: '官方活動粉絲頁' },
+                    { src:'./images/race/03.jpg', caption: '工作人員識別證' },
+                    { src:'./images/race/04.jpg', caption: '紀念品小燈箱' },
+                    { src:'./images/race/05.jpg', caption: '舞台背板設計' },
+                    { src:'./images/race/06.jpg', caption: '活動紀念品' },
+                    { src:'./images/race/07.jpg', caption: '獎牌設計' },
+                    { src:'./images/race/08.jpg', caption: '破記錄獎狀' },
+                    { src:'./images/race/09.jpg', caption: '參賽證書' },
+                    { src:'./images/race/10.jpg', caption: '活動流程' },
+                    { src:'./images/race/11.jpg', caption: '活動報名處' }    
                 ]
             },
             'brand': {
                 title: '企業視覺設計',
-                cover: './images/brand/cover.jpg?auto=format&fit=crop&q=80&w=1600',
+                cover: './images/brand/cover.jpg',
                 description: '品牌形象設計是透過視覺、語言與商業策略的整合，賦予企業或產品獨特的人格與價值觀。它不僅僅是一個 Logo，更是與消費者溝通的橋樑，協助企業在市場中脫穎而出，建立長期的品牌信任感與辨識度。',
                 images: [
-                    { src:'./images/brand/01.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
-                    { src:'./images/brand/02.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
-                    { src:'./images/brand/03.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
-                    { src:'./images/brand/04.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
-                    { src:'./images/brand/05.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
-                    { src:'./images/brand/06.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
-                    { src:'./images/brand/07.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
-                    { src:'./images/brand/08.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
-                    { src:'./images/brand/09.jpg?auto=format&fit=crop&q=80&w=1600', caption: '商品宣傳照' },
-                    { src:'./images/brand/10.jpg?auto=format&fit=crop&q=80&w=1600', caption: '店家暖簾應用' }
+                    { src:'./images/brand/01.jpg', caption: '商品宣傳照' },
+                    { src:'./images/brand/02.jpg', caption: '商品宣傳照' },
+                    { src:'./images/brand/03.jpg', caption: '商品宣傳照' },
+                    { src:'./images/brand/04.jpg', caption: '商品宣傳照' },
+                    { src:'./images/brand/05.jpg', caption: '商品宣傳照' },
+                    { src:'./images/brand/06.jpg', caption: '商品宣傳照' },
+                    { src:'./images/brand/07.jpg', caption: '商品宣傳照' },
+                    { src:'./images/brand/08.jpg', caption: '商品宣傳照' },
+                    { src:'./images/brand/09.jpg', caption: '商品宣傳照' },
+                    { src:'./images/brand/10.jpg', caption: '店家暖簾應用' }
                 ]
             }
         };
 
-        let currentProjectId = null;
+    const root = document.documentElement;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const desktop = window.matchMedia('(min-width: 768px)');
+    const elements = {
+        navbar: document.getElementById('navbar'),
+        themeButton: document.getElementById('themeToggleBtn'),
+        themeImage: document.getElementById('themeToggleImg'),
+        themeFallback: document.getElementById('themeToggleFallback'),
+        menuButton: document.getElementById('mobileMenuBtn'),
+        menu: document.getElementById('mobileMenu'),
+        projects: document.getElementById('projectsContainer'),
+        projectModal: document.getElementById('projectModal'),
+        projectClose: document.getElementById('projectModalClose'),
+        title: document.getElementById('modalTitle'),
+        description: document.getElementById('modalDesc'),
+        downloadContainer: document.getElementById('modalDownloadContainer'),
+        downloadLink: document.getElementById('modalDownloadLink'),
+        downloadLabel: document.getElementById('modalDownloadLabel'),
+        cover: document.getElementById('modalCoverImage'),
+        images: document.getElementById('modalImagesContainer'),
+        video: document.getElementById('modalVideoContainer'),
+        zoom: document.getElementById('imageZoomModal'),
+        zoomClose: document.getElementById('imageZoomClose'),
+        zoomImage: document.getElementById('zoomedImage'),
+        caption: document.getElementById('zoomedCaption')
+    };
 
-        // 打开灯箱 (左右分栏载入)
-        window.openProjectModal = function(projectId) {
-            const project = portfolioData[projectId];
-            if (!project) return;
+    // 儲存空間被停用時，切換功能仍然可以正常使用。
+    let themePreference = root.dataset.themePreference || 'system';
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+    function applyTheme(isDark) {
+        root.classList.toggle('dark', isDark);
+        const state = isDark ? '關燈（寶寶睡覺中）' : '開燈（寶寶醒著）';
+        elements.themeButton.title = state;
+        elements.themeButton.setAttribute('aria-pressed', String(isDark));
+        elements.themeButton.setAttribute('aria-label', isDark
+            ? '切換為亮色模式，寶寶醒著' : '切換為深色模式，寶寶睡覺');
+        elements.themeFallback.textContent = isDark ? '🌙' : '☀️';
+        elements.themeImage.hidden = false;
+        elements.themeFallback.hidden = true;
+        elements.themeImage.src = isDark ? './images/dark-switch.png' : './images/light-switch.png';
+        document.querySelector('meta[name="theme-color"]').content = isDark ? '#0f172a' : '#f8fafc';
+    }
+    elements.themeImage.addEventListener('error', () => {
+        elements.themeImage.hidden = true;
+        elements.themeFallback.hidden = false;
+    });
+    applyTheme(root.classList.contains('dark'));
+    elements.themeButton.addEventListener('click', () => {
+        themePreference = root.classList.contains('dark') ? 'light' : 'dark';
+        root.dataset.themePreference = themePreference;
+        applyTheme(themePreference === 'dark');
+        try { localStorage.setItem('theme', themePreference); } catch (_) { /* 本次切換仍生效。 */ }
+    });
+    systemTheme.addEventListener('change', event => {
+        if (themePreference === 'system') applyTheme(event.matches);
+    });
+    window.addEventListener('storage', event => {
+        if (event.key !== 'theme' && event.key !== null) return;
+        themePreference = event.newValue === 'dark' || event.newValue === 'light'
+            ? event.newValue : 'system';
+        root.dataset.themePreference = themePreference;
+        applyTheme(themePreference === 'system' ? systemTheme.matches : themePreference === 'dark');
+    });
 
-            currentProjectId = projectId;
+    function setMenu(open, restoreFocus = false) {
+        const show = open && !desktop.matches;
+        elements.menu.hidden = !show;
+        elements.menuButton.setAttribute('aria-expanded', String(show));
+        elements.menuButton.setAttribute('aria-label', show ? '關閉選單' : '開啟選單');
+        elements.menuButton.querySelector('[data-menu-icon]').classList.toggle('is-open', show);
+        if (restoreFocus) elements.menuButton.focus({ preventScroll: true });
+    }
+    elements.menuButton.addEventListener('click', () => setMenu(elements.menu.hidden));
+    elements.menu.addEventListener('click', event => {
+        if (event.target.closest('a')) setMenu(false);
+    });
+    document.addEventListener('click', event => {
+        if (!elements.menu.hidden && !elements.navbar.contains(event.target)) setMenu(false);
+    });
+    desktop.addEventListener('change', () => setMenu(false));
 
-            // 1. 填入左侧標題與長篇故事描述
-            document.getElementById('modalTitle').innerText = project.title;
-            document.getElementById('modalDesc').innerText = project.description;
-            
-            // 2. 智慧提取該專案的設定封面圖，動態設定為左側的「專案主封面」
-            if (project.cover) {
-                document.getElementById('modalCoverImage').src = project.cover;
-            } else if (project.images && project.images.length > 0) {
-                document.getElementById('modalCoverImage').src = project.images[0].src;
-            } else {
-                document.getElementById('modalCoverImage').src = '';
+    // 每次捲動最多更新一次，避免短時間重複計算。
+    let scrollFrame = 0;
+    function updateNavbar() {
+        scrollFrame = 0;
+        elements.navbar.classList.toggle('shadow-sm', window.scrollY > 50);
+        elements.navbar.classList.toggle('bg-white/95', window.scrollY > 50);
+        elements.navbar.classList.toggle('bg-white/80', window.scrollY <= 50);
+    }
+    window.addEventListener('scroll', () => {
+        if (!scrollFrame) scrollFrame = requestAnimationFrame(updateNavbar);
+    }, { passive: true });
+    updateNavbar();
+
+    const revealElements = document.querySelectorAll('.reveal');
+    let revealObserver;
+    function configureReveal() {
+        if (revealObserver) revealObserver.disconnect();
+        if (reducedMotion.matches || !('IntersectionObserver' in window)) {
+            root.classList.remove('js-reveal');
+            return;
+        }
+        revealObserver = new IntersectionObserver(entries => {
+            for (const entry of entries) {
+                if (!entry.isIntersecting) continue;
+                entry.target.classList.add('active');
+                revealObserver.unobserve(entry.target);
             }
+        }, { threshold: .1, rootMargin: '0px 0px -24px 0px' });
+        root.classList.add('js-reveal');
+        for (const element of revealElements) {
+            if (!element.classList.contains('active')) revealObserver.observe(element);
+        }
+    }
+    configureReveal();
+    reducedMotion.addEventListener('change', configureReveal);
 
-            // 3. 清空右側舊圖片容器
-            const videoContainer = document.getElementById('modalVideoContainer');
-            if (project.youtube) {
-                // 如果該專案有設定 youtube 影片代號，就動態產生 iframe 播放器
-                videoContainer.innerHTML = `
-                    <div class="w-full aspect-video rounded-2xl overflow-hidden bg-slate-900 shadow-md border border-slate-200">
-                        <iframe class="w-full h-full" src="https://www.youtube.com/embed/${project.youtube}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                `;
-                videoContainer.classList.remove('hidden');
-            } else {
-                // 如果沒有影片，就把容器清空並隱藏
-                videoContainer.innerHTML = '';
-                videoContainer.classList.add('hidden');
-            }
-
-            const container = document.getElementById('modalImagesContainer');
-            container.innerHTML = ''; 
-
-            // 4. 迴圈動態生成右側 Pinterest 應用成果圖卡
-            if (project.images && project.images.length > 0) {
-                project.images.forEach(imgData => {
-                    const captionText = imgData.caption || '';
-                    
-                    const imgHTML = `
-                        <div class="break-inside-avoid w-full inline-block mb-6 group cursor-zoom-in" onclick="openImageZoom('${imgData.src}', '${captionText}')">
-                            <div class="rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1 p-3">
-                                <div class="rounded-xl overflow-hidden bg-slate-50">
-                                    <img src="${imgData.src}" alt="${captionText}" class="w-full h-auto object-cover">
-                                </div>
-                                ${captionText ? `
-                                    <div class="mt-3 px-1">
-                                        <p class="text-slate-700 text-sm font-medium leading-relaxed">${captionText}</p>
-                                    </div>
-                                ` : ''}
-                            </div>
-                        </div>
-                    `;
-                    container.innerHTML += imgHTML;
-                });
-            }
-
-            // 5. 漸層彈出大視窗
-            const modal = document.getElementById('projectModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                modal.classList.add('opacity-100');
-            }, 10);
-            
-            document.body.style.overflow = 'hidden'; // 鎖定網頁底層滾動
-        };
-
-        // 關閉專案燈箱
-        window.closeProjectModal = function() {
-            const modal = document.getElementById('projectModal');
-            modal.classList.remove('opacity-100');
-            modal.classList.add('opacity-0');
-            
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-                document.getElementById('modalImagesContainer').innerHTML = ''; // 釋放記憶體
-                document.getElementById('modalCoverImage').src = ''; // 清空封面
-                
-                // 👇 新增這兩行：關閉時清空影片，停止播放 👇
-                document.getElementById('modalVideoContainer').innerHTML = ''; 
-                document.getElementById('modalVideoContainer').classList.add('hidden');
-                
-            }, 300);
-            document.body.style.overflow = ''; // 恢復網頁底層滾動
-        };
-
-        // 打開單圖全螢幕放大 (第三層)
-        window.openImageZoom = function(src, caption) {
-            const zoomModal = document.getElementById('imageZoomModal');
-            const zoomedImg = document.getElementById('zoomedImage');
-            
-            zoomedImg.src = src;
-            document.getElementById('zoomedCaption').innerText = caption;
-            
-            zoomModal.classList.remove('hidden');
-            zoomModal.classList.add('flex');
-            
-            setTimeout(() => {
-                zoomModal.classList.remove('opacity-0');
-                zoomModal.classList.add('opacity-100');
-                zoomedImg.classList.remove('scale-95');
-                zoomedImg.classList.add('scale-100');
-            }, 10);
-        };
-
-        // 關閉單圖全螢幕放大
-        window.closeImageZoom = function() {
-            const zoomModal = document.getElementById('imageZoomModal');
-            const zoomedImg = document.getElementById('zoomedImage');
-            
-            zoomModal.classList.remove('opacity-100');
-            zoomModal.classList.add('opacity-0');
-            zoomedImg.classList.remove('scale-100');
-            zoomedImg.classList.add('scale-95');
-            
-            setTimeout(() => {
-                zoomModal.classList.add('hidden');
-                zoomModal.classList.remove('flex');
-                zoomedImg.src = "";
-            }, 300);
-        };
-
-        // 監聽鍵盤 ESC 鍵
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                const zoomModal = document.getElementById('imageZoomModal');
-                const projectModal = document.getElementById('projectModal');
-                
-                if (!zoomModal.classList.contains('hidden')) {
-                    closeImageZoom();
-                } 
-                else if (!projectModal.classList.contains('hidden')) {
-                    closeProjectModal();
-                }
-            }
+    // 使用事件委派，動態圖卡不需要逐一綁定滑鼠事件。
+    const cursorMedia = window.matchMedia('(min-width: 768px) and (any-hover: hover) and (any-pointer: fine)');
+    const interactiveSelector = 'a, button, [role="button"], .cursor-zoom-out';
+    let cursorFrame = 0;
+    let cursorX = 0;
+    let cursorY = 0;
+    function resetCursor() {
+        root.classList.remove('custom-cursor', 'cursor-interactive');
+        cancelAnimationFrame(cursorFrame);
+        cursorFrame = 0;
+    }
+    function cursorEnabled() { return cursorMedia.matches && !reducedMotion.matches; }
+    document.addEventListener('pointermove', event => {
+        if (!cursorEnabled() || event.pointerType !== 'mouse') {
+            resetCursor();
+            return;
+        }
+        cursorX = event.clientX;
+        cursorY = event.clientY;
+        if (!cursorFrame) cursorFrame = requestAnimationFrame(() => {
+            cursorFrame = 0;
+            root.style.setProperty('--cursor-x', `${cursorX}px`);
+            root.style.setProperty('--cursor-y', `${cursorY}px`);
+            root.classList.add('custom-cursor');
         });
+    }, { passive: true });
+    document.addEventListener('pointerover', event => {
+        root.classList.toggle('cursor-interactive', Boolean(event.target.closest(interactiveSelector)));
+    });
+    document.addEventListener('pointerout', event => {
+        const target = event.relatedTarget;
+        root.classList.toggle('cursor-interactive', target instanceof Element && Boolean(target.closest(interactiveSelector)));
+    });
+    document.documentElement.addEventListener('pointerleave', resetCursor);
+    window.addEventListener('blur', resetCursor);
+    cursorMedia.addEventListener('change', resetCursor);
+    reducedMotion.addEventListener('change', resetCursor);
+
+    const closeTimers = new WeakMap();
+    const pageContent = document.querySelectorAll('[data-page-content]');
+    let pageState = null;
+    let activeProject = null;
+    let projectOpen = false;
+    let zoomOpen = false;
+    let projectTrigger = null;
+    let zoomTrigger = null;
+
+    function lockPage() {
+        if (pageState) return;
+        const properties = ['position', 'top', 'left', 'right', 'width', 'overflow', 'paddingRight'];
+        const styles = Object.fromEntries(properties.map(property => [property, document.body.style[property]]));
+        const scrollbarWidth = window.innerWidth - root.clientWidth;
+        pageState = { y: window.scrollY, styles };
+        if (scrollbarWidth > 0) {
+            document.body.style.paddingRight = `${parseFloat(getComputedStyle(document.body).paddingRight) + scrollbarWidth}px`;
+        }
+        Object.assign(document.body.style, {
+            position: 'fixed', top: `-${pageState.y}px`, left: '0', right: '0', width: '100%', overflow: 'hidden'
+        });
+        for (const element of pageContent) element.inert = true;
+    }
+    function unlockPage() {
+        if (!pageState) return;
+        for (const element of pageContent) element.inert = false;
+        const saved = pageState;
+        pageState = null;
+        Object.assign(document.body.style, saved.styles);
+        const previousBehavior = root.style.scrollBehavior;
+        root.style.scrollBehavior = 'auto';
+        window.scrollTo(0, saved.y);
+        root.style.scrollBehavior = previousBehavior;
+    }
+    function showModal(modal) {
+        clearTimeout(closeTimers.get(modal));
+        modal.hidden = false;
+        modal.inert = false;
+        modal.setAttribute('aria-hidden', 'false');
+        modal.dataset.state = 'open';
+        requestAnimationFrame(() => {
+            if (modal.dataset.state === 'open') modal.classList.add('is-open');
+        });
+    }
+    function hideModal(modal, cleanup) {
+        clearTimeout(closeTimers.get(modal));
+        modal.dataset.state = 'closing';
+        modal.classList.remove('is-open');
+        if (modal.contains(document.activeElement)) document.activeElement.blur();
+        modal.inert = true;
+        modal.setAttribute('aria-hidden', 'true');
+        const finish = () => {
+            modal.hidden = true;
+            modal.dataset.state = 'closed';
+            if (cleanup) cleanup();
+            closeTimers.delete(modal);
+        };
+        if (reducedMotion.matches) finish();
+        else closeTimers.set(modal, setTimeout(finish, 200));
+    }
+    function restoreFocus(element) {
+        if (element instanceof HTMLElement && element.isConnected && !element.closest('[inert]')) {
+            element.focus({ preventScroll: true });
+        }
+    }
+
+    function renderImages(project) {
+        const fragment = document.createDocumentFragment();
+        (project.images || []).forEach((data, index) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'gallery-button break-inside-avoid w-full inline-block mb-6 group cursor-zoom-in';
+            button.dataset.imageIndex = String(index);
+            button.setAttribute('aria-label', `放大：${data.caption || project.title}，第 ${index + 1} 張`);
+            const card = document.createElement('span');
+            card.className = 'block rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-3';
+            const frame = document.createElement('span');
+            frame.className = 'block rounded-xl overflow-hidden bg-slate-50';
+            const image = document.createElement('img');
+            image.src = data.src;
+            image.alt = data.caption || project.title;
+            image.loading = index < 2 ? 'eager' : 'lazy';
+            image.decoding = 'async';
+            image.className = 'w-full h-auto object-contain';
+            image.addEventListener('error', () => {
+                const fallback = document.createElement('span');
+                fallback.className = 'image-fallback';
+                fallback.textContent = '圖片暫時無法載入';
+                frame.replaceChildren(fallback);
+            }, { once: true });
+            frame.append(image);
+            card.append(frame);
+            if (data.caption) {
+                const caption = document.createElement('span');
+                caption.className = 'block mt-3 px-1 text-slate-700 text-sm font-medium leading-relaxed';
+                caption.textContent = data.caption;
+                card.append(caption);
+            }
+            button.append(card);
+            fragment.append(button);
+        });
+        elements.images.replaceChildren(fragment);
+    }
+    function renderVideo(project) {
+        elements.video.replaceChildren();
+        elements.video.hidden = !project.youtube || !/^[\w-]{11}$/.test(project.youtube);
+        if (elements.video.hidden) return;
+        const frame = document.createElement('div');
+        frame.className = 'w-full aspect-video rounded-2xl overflow-hidden bg-slate-900 shadow-md border border-slate-200';
+        const iframe = document.createElement('iframe');
+        iframe.className = 'w-full h-full';
+        iframe.src = `https://www.youtube.com/embed/${project.youtube}`;
+        iframe.title = `${project.title}：影片`;
+        iframe.loading = 'lazy';
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+        iframe.allowFullscreen = true;
+        iframe.style.border = '0';
+        frame.append(iframe);
+        elements.video.append(frame);
+    }
+    // 有下載網址的專案才顯示按鈕，切換專案時同步更新。
+    function renderDownload(project) {
+        elements.downloadContainer.hidden = !project.downloadUrl;
+        if (project.downloadUrl) {
+            elements.downloadLink.setAttribute('href', project.downloadUrl);
+            elements.downloadLabel.textContent = project.downloadLabel || '下載檔案';
+        } else {
+            elements.downloadLink.removeAttribute('href');
+            elements.downloadLabel.textContent = '';
+        }
+    }
+    function openProjectModal(projectId, trigger = document.activeElement) {
+        const project = portfolioData[projectId];
+        if (!project) return;
+        if (zoomOpen) closeImageZoom(false);
+        if (!projectOpen) projectTrigger = trigger;
+        activeProject = project;
+        elements.title.textContent = project.title;
+        elements.description.textContent = project.description;
+        renderDownload(project);
+        const cover = project.cover || project.images?.[0]?.src;
+        elements.cover.hidden = !cover;
+        if (cover) elements.cover.src = cover;
+        else elements.cover.removeAttribute('src');
+        elements.cover.alt = `${project.title}：主封面`;
+        renderImages(project);
+        renderVideo(project);
+        setMenu(false);
+        projectOpen = true;
+        lockPage();
+        elements.projectModal.setAttribute('aria-modal', 'true');
+        showModal(elements.projectModal);
+        elements.projectModal.querySelectorAll('.project-modal-scroll').forEach(element => { element.scrollTop = 0; });
+        elements.projectClose.focus({ preventScroll: true });
+    }
+    function closeProjectModal() {
+        if (!projectOpen) return;
+        projectOpen = false;
+        if (zoomOpen) closeImageZoom(false);
+        activeProject = null;
+        renderDownload({});
+        // 關閉時立即移除播放器，讓聲音同步停止。
+        elements.video.replaceChildren();
+        elements.video.hidden = true;
+        hideModal(elements.projectModal, () => {
+            elements.images.replaceChildren();
+            elements.cover.removeAttribute('src');
+        });
+        unlockPage();
+        restoreFocus(projectTrigger);
+    }
+    function openImageZoom(src, caption = '', trigger = document.activeElement) {
+        if (!projectOpen || !src) return;
+        zoomTrigger = trigger;
+        zoomOpen = true;
+        elements.zoomImage.src = src;
+        elements.zoomImage.alt = caption || activeProject.title;
+        elements.caption.textContent = caption;
+        showModal(elements.zoom);
+        elements.zoomClose.focus({ preventScroll: true });
+        elements.projectModal.inert = true;
+        elements.projectModal.setAttribute('aria-hidden', 'true');
+        elements.projectModal.setAttribute('aria-modal', 'false');
+    }
+    function closeImageZoom(returnFocus = true) {
+        if (!zoomOpen) return;
+        zoomOpen = false;
+        hideModal(elements.zoom, () => elements.zoomImage.removeAttribute('src'));
+        if (projectOpen) {
+            elements.projectModal.inert = false;
+            elements.projectModal.setAttribute('aria-hidden', 'false');
+            elements.projectModal.setAttribute('aria-modal', 'true');
+            if (returnFocus) restoreFocus(zoomTrigger);
+        }
+    }
+    elements.projects.addEventListener('click', event => {
+        const card = event.target.closest('[data-project]');
+        if (card) openProjectModal(card.dataset.project, card);
+    });
+    elements.projects.addEventListener('keydown', event => {
+        const card = event.target.closest('[data-project]');
+        if (card && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            openProjectModal(card.dataset.project, card);
+        }
+    });
+    elements.images.addEventListener('click', event => {
+        const button = event.target.closest('[data-image-index]');
+        const image = button && activeProject?.images?.[Number(button.dataset.imageIndex)];
+        if (image) openImageZoom(image.src, image.caption || '', button);
+    });
+    elements.projectClose.addEventListener('click', closeProjectModal);
+    elements.zoomClose.addEventListener('click', () => closeImageZoom());
+    elements.zoom.addEventListener('click', event => {
+        if (event.target === elements.zoom) closeImageZoom();
+    });
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+            if (zoomOpen) closeImageZoom();
+            else if (projectOpen) closeProjectModal();
+            else if (!elements.menu.hidden) setMenu(false, true);
+            return;
+        }
+        if (event.key !== 'Tab' || !projectOpen) return;
+        const modal = zoomOpen ? elements.zoom : elements.projectModal;
+        const focusable = [...modal.querySelectorAll('a[href], button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])')]
+            .filter(element => !element.closest('[hidden], [inert]') && element.getClientRects().length > 0);
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (!first) {
+            event.preventDefault();
+            modal.focus();
+        } else if (event.shiftKey && (document.activeElement === first || !modal.contains(document.activeElement))) {
+            event.preventDefault();
+            last.focus();
+        } else if (!event.shiftKey && (document.activeElement === last || !modal.contains(document.activeElement))) {
+            event.preventDefault();
+            first.focus();
+        }
+    });
+
+    // 保留公開函式名稱，方便之後新增作品或按鈕。
+    Object.assign(window, { openProjectModal, closeProjectModal, openImageZoom, closeImageZoom });
+
+})();
     </script>
 </body>
 </html>
