@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="description" content="Aquafire 游焰熾的個人設計作品集。擁有超過 10 年平面設計、品牌企劃與活動視覺經驗，將生活感融入設計，提供量身打造的視覺解決方案。">
     <title>游焰熾 Aquafire | 平面與視覺設計師・品牌形象與活動視覺作品集</title>
+
     <meta name="description" content="Aquafire 游焰熾的個人設計作品集。擁有超過 10 年經驗，專注於品牌形象設計(VIS)、活動主視覺(KV)、Logo設計與跨媒材整合，提供具備生活感與溫度的專業視覺解決方案。">
+
     <meta name="keywords" content="游焰熾, Aquafire, 平面設計師, 視覺設計, 品牌形象設計, Logo設計, 活動主視覺, KV設計, 珍珠奶茶護照, FNFN ">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -211,7 +213,24 @@
             </div>
 
             <div id="projectsContainer" class="columns-1 md:columns-2 lg:columns-3 gap-6">
-                
+               <div onclick="openProjectModal('leonfont')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
+                    <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
+                        <img src="./images/leonbaby/cover.jpg?auto=format&fit=crop&q=80&w=800" alt="Leonbaby 字型" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
+                    </div>
+                    <div class="p-6 relative z-10 bg-white">
+                        <div class="flex gap-2 mb-4">
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">Leonbaby</span>
+                            <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 text-slate-600 rounded-md">字型設計</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:text-brand transition-colors">字型設計</h3>
+                        <p class="text-slate-600 text-sm mb-4 line-clamp-4">2025兒子來到地球的第一年，我把你的可愛，作成了字體。以嬰兒「頭大、身體小」的比例為靈感，設計了一套英文字形，名字源自兒子的英文名 Leon，紀念我們一起長大的第一年。一份送給兒子的生日禮物，也想分享給世界。</p>
+                        <span class="inline-flex items-center gap-1 text-sm font-medium text-brand">
+                            觀看內容 <i class="ph-bold ph-images"></i>
+                        </span>
+                    </div>
+                </div>
+
+               
                 <div onclick="openProjectModal('boba')" class="break-inside-avoid w-full inline-block mb-6 group relative bg-white rounded-3xl overflow-hidden border border-slate-200 hover:border-brand/50 hover:shadow-lg transition-all duration-300 reveal cursor-pointer shadow-sm">
                     <div class="aspect-[4/3] bg-slate-100 relative overflow-hidden">
                         <img src="./images/boba/passport.jpg?auto=format&fit=crop&q=80&w=800" alt="珍珠奶茶護照" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100">
@@ -786,7 +805,20 @@
         // 專案燈箱 (第二層內容) 資料與邏輯
         // ==========================================
         const portfolioData = {
-            'boba': {
+                  'leonfont': {
+                title: 'Leonbaby字型',
+                cover: './images/leonbaby/cover.jpg?auto=format&fit=crop&q=80&w=1600',
+                description: '2025兒子來到地球的第一年，我把你的可愛，作成了字體。以嬰兒「頭大、身體小」的比例為靈感，設計了一套英文字形，名字源自兒子的英文名 Leon，紀念我們一起長大的第一年。一份送給兒子的生日禮物，也想分享給世界。',
+                
+                images: [
+                    { src:'./images/leonbaby/font-1.jpg?auto=format&fit=crop&q=80&w=1600', caption: '字型應用範例' },
+                    { src:'./images/leonbaby/font-2.jpg?auto=format&fit=crop&q=80&w=1600', caption: '字型應用範例' },
+                    { src:'./images/leonbaby/font-3.jpg?auto=format&fit=crop&q=80&w=1600', caption: '字型應用範例' },
+                    { src:'./images/leonbaby/font-4.jpg?auto=format&fit=crop&q=80&w=1600', caption: '字型應用範例' }
+                ]
+            },           
+ 
+           'boba': {
                 title: '珍珠奶茶護照設計',
                 cover: './images/boba/passport.jpg?auto=format&fit=crop&q=80&w=1600',
                 description: '原本護照套上的 (Republic of China) 字樣，很容易讓我們在國外旅遊時被誤認為中國人，會發生一些不必要的誤會，所以我設計的護照上就拿掉了這行文字，只留下 Taiwan字樣。在想封面的時候，腦中有想過一些元素是可以拿來代表台灣的東西，例如原住民的圖騰、台灣的宗教信仰…等，但如果用了這些元素，就會侷限了某種族或宗教而代表性不足。後來我想到珍珠奶茶這個台灣在地的平民美食，是外國朋友來都一定帶他們喝的飲料，都得到很好的回饋，民以食為天，吃的東西是最貼近生活文化，珍珠奶茶這個台灣代表性很高的飲料，拿來當作台灣護照封面，打破了種族、宗教、地區、甚至國界，又可以宣傳台灣。\n\nThe original \'Republic of China\' text on the passport cover often leads to us being mistaken for Chinese citizens when traveling abroad, which can cause unnecessary misunderstandings.\nTherefore, in my passport design, I removed that line entirely and only kept the word \'Taiwan.\'\n\nWhen brainstorming the cover design, I considered various elements that could represent Taiwan, such as Indigenous totems or Taiwanese religious beliefs.\nHowever, I felt that using those elements might be too narrow, limiting the representation to a specific ethnic group or religion.\n\nThen, I thought of bubble tea, a beloved, everyday treat here in Taiwan.\nIt’s the one drink we always make sure our foreign friends try when they visit, and it always receives great feedback.\nAs the saying goes, \'food is the paramount necessity of the people\';\nwhat we eat and drink is the most authentic reflection of our daily culture.\nUsing a highly representative drink like bubble tea for the Taiwan passport cover breaks down barriers of race, religion, region, and even national borders, all while serving as a fantastic way to promote Taiwan.',
